@@ -1,5 +1,5 @@
 
-# 004 — The Devs Foundation Method
+# The Devs Foundation Method
 
 ## Building a Multi-Agent System with a Shared Brain
 
