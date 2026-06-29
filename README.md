@@ -1,4 +1,36 @@
 
+# 004 — The Devs Foundation Method
+
+## Building a Multi-Agent System with a Shared Brain
+
+### Complete Guide — From Zero to Production System
+
+---
+
+## Publication Mode — Defensive Publication
+
+This document is published as a **defensive publication** to establish public **prior art**.
+
+**What this means:**
+- The method described here is made public to **prevent third parties from patenting it**
+- Anyone can **use, adapt, and build upon** this method
+- We (Devs Foundation) **retain the right to use, modify, and evolve** the system freely
+- No patent is filed — knowledge is open by nature
+
+**Why defensive publication and not a patent:**
+- Software patents are expensive ($5k–15k+), time-consuming (2–5 years), and hard to defend
+- Our value is in the **working system**, not a piece of paper
+- Defensive publication is **free, immediate, and effective** — it establishes prior art instantly
+- The method remains accessible to anyone who wants to learn, contribute, or build upon it
+
+**License:** Public Domain — Free to use, adapt, and build upon.
+**Publication date:** 2026-06-29
+**Author:** Rui Almeida (Devs Foundation)
+
+> *Knowledge that is not shared withers. What is shared multiplies.*
+
+---
+
 # 004 — O Método Devs Foundation
 
 ## Construir um Sistema Multi-Agente com Cérebro Partilhado
