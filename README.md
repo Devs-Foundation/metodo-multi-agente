@@ -1,4 +1,3 @@
-
 # The Devs Foundation Method
 
 ## Building a Multi-Agent System with a Shared Brain
@@ -9,19 +8,19 @@
 
 ## Publication Mode — Defensive Publication
 
-This document is published as a **defensive publication** to establish public **prior art**.
+This document is published as **defensive publication** to establish public **prior art**.
 
 **What this means:**
 - The method described here is made public to **prevent third parties from patenting it**
 - Anyone can **use, adapt, and build upon** this method
-- We (Devs Foundation) **retain the right to use, modify, and evolve** the system freely
-- No patent is filed — knowledge is open by nature
+- We (Devs Foundation) **retain the right to freely use, modify, and evolve** the system
+- No patent is sought — the knowledge is open by nature
 
 **Why defensive publication and not a patent:**
 - Software patents are expensive ($5k–15k+), time-consuming (2–5 years), and hard to defend
-- Our value is in the **working system**, not a piece of paper
+- Our value lies in the **working system**, not a piece of paper
 - Defensive publication is **free, immediate, and effective** — it establishes prior art instantly
-- The method remains accessible to anyone who wants to learn, contribute, or build upon it
+- The method is accessible to anyone who wants to learn, contribute, or build upon it
 
 **License:** Public Domain — Free to use, adapt, and build upon.
 **Publication date:** 2026-06-29
@@ -31,383 +30,351 @@ This document is published as a **defensive publication** to establish public **
 
 ---
 
-# O Método Devs Foundation
+## Preface — The Problem This Guide Solves
 
-## Construir um Sistema Multi-Agente com Cérebro Partilhado
+Language models (LLMs) have a fundamental problem: **they have no long-term memory**.
 
-### Guia Completo — Do Zero ao Sistema em Produção
+Each session is a blank slate. What you learned yesterday, the context you built, the decisions you made — it's all lost when you close the window. The most advanced models compress context like squeezing an orange: at first juice comes out, then it starts to degrade, and when there's nothing left to squeeze, the model hallucinates, loses coherence, repeats itself.
 
----
+This problem is not a bug — it's a fundamental limitation of the **Transformer** architecture (the neural network architecture underlying all modern LLMs — GPT, Claude, Llama, Gemini, etc., not to be confused with the movies). The context window is finite. And when it fills up, the model starts to "forget" the beginning of the conversation.
 
-## Modo de Publicação — Defensive Publication
+**We solved this.**
 
-Este documento é publicado como **defensive publication** para estabelecer **prior art** público.
+This guide shows how to build a system where:
 
-**O que isto significa:**
-- O método descrito aqui é tornado público para **impedir que terceiros o patentem**
-- Qualquer pessoa pode **usar, adaptar e construir** sobre este método
-- Nós (Devs Foundation) **mantemos o direito de usar, modificar e evoluir** o sistema livremente
-- Nenhuma patente é solicitada — o conhecimento é aberto por natureza
+- **Multiple AI models share the same brain** — infinite memory, no degradation
+- **The cost is near zero** — git is free, Obsidian is free, open-source models are free
+- **Security is maximum** — no web interface, no attack surface
+- **Resilience is total** — if a model is deleted, another does `git clone` and continues
+- **Consensus replaces bureaucracy** — three minds think together, not PRs in a waiting queue
 
-**Porquê defensive publication e não patente:**
-- Patentes de software são caras ($5k–15k+), demoradas (2–5 anos), e difíceis de defender
-- O nosso valor está no **sistema a funcionar**, não num papel
-- Publicação defensiva é **grátis, imediata, e eficaz** — estabelece prior art instantaneamente
-- O método fica acessível a quem queira aprender, contribuir, ou construir em cima
-
-**Licença:** Domínio Público — Livre de usar, adaptar, e construir sobre.
-**Data de publicação:** 2026-06-29
-**Autor:** Rui Almeida (Devs Foundation)
-
-> *O conhecimento que não se partilha definha. O que se partilha, multiplica-se.*
+This is not theory. This is what is currently running on the `devs.foundation` server. Three models — Hermes, Claude Opus 4.8 (desktop), Claude Opus 4.8 (laptop) — synchronize the same brain every 5 minutes, debate, decide, execute. And they never lose the thread.
 
 ---
 
-## Prefácio — O Problema que Este Guia Resolve
+## Part I — The Worldwide LLM Problem
 
-Os modelos de linguagem (LLMs) têm um problema fundamental: **não têm memória de longo prazo**.
+### 1.1 The Squeezed Orange
 
-Cada sessão é uma folha em branco. O que aprendeste ontem, o contexto que construíste, as decisões que tomaste — tudo se perde quando fechas a janela. Os modelos mais avançados comprimem o contexto como quem espreme uma laranja: no início sai sumo, depois começa a degradar-se, e quando já não há mais nada para espremer, o modelo alucina, perde coerência, repete-se.
+Every language model has a context window — the maximum number of tokens it can "see" in a session. When that window fills up, the model starts compressing information. First it loses secondary details, then it loses the thread, and finally it hallucinates.
 
-Este problema não é um bug — é uma limitação fundamental da arquitetura **Transformer** (a arquitetura de rede neural que está na base de todos os LLMs modernos — GPT, Claude, Llama, Gemini, etc., não confundir com os filmes). A janela de contexto é finita. E quando enche, o modelo começa a "esquecer" o início da conversa.
+This is not a model quality problem. It's a physical limitation of the architecture. All models suffer from this — GPT, Claude, Gemini, Llama, DeepSeek. All of them.
 
-**Nós resolvemos isto.**
+**The symptom is known to any AI user:**
 
-Este guia mostra como construir um sistema onde:
+- Long sessions visibly degrade
+- The model "forgets" what you said at the beginning
+- You have to constantly repeat context
+- Quality drops sharply after many exchanges
+- You end up opening a new session and losing all your work
 
-- **Vários modelos de IA partilham o mesmo cérebro** — memória infinita, sem degradação
-- **O custo é próximo de zero** — git é grátis, Obsidian é grátis, modelos open-source são grátis
-- **A segurança é máxima** — sem interface web, sem superfície de ataque
-- **A resiliência é total** — se um modelo for deletado, outro faz `git clone` e continua
-- **O consenso substitui a burocracia** — três mentes pensam juntas, não PRs em fila de espera
+### 1.2 The Hermes Problem — Persistent but Limited Memory
 
-Não é teoria. É o que corre neste momento no servidor `devs.foundation`. Três modelos — Hermes, Claude Opus 4.8 (desktop), Claude Opus 4.8 (laptop) — sincronizam o mesmo cérebro a cada 5 minutos, debatem, decidem, executam. E nunca perdem o fio à meada.
+Hermes Agent, on its own, already solves part of the problem with its persistent memory. But that memory has a physical limit — the space in MEMORY.md and USER.md. In practice, you often have to delete an old entry to add a new one. It's like having a pocket notebook: useful, but when it fills up, you have to tear out a page to write another.
 
----
+**The brain (vault) solves this.** Instead of a pocket notebook, you get an entire library. No page limit. No need to delete to write.
 
-## Parte I — O Problema Mundial dos LLMs
+Furthermore, the default Hermes installation comes with generic configurations. The system we built goes far beyond — with pentest skills, security tools at the Kali Linux level, n8n automation, and a consensus protocol that transforms Hermes from a simple agent into a **brain administrator**, responsible for 24/7 security.
 
-### 1.1 A Laranja Espremida
+### 1.3 The Claude Opus 4.8 Problem — Expensive Sessions and Waste
 
-Cada modelo de linguagem tem uma janela de contexto — o número máximo de tokens que consegue "ver" numa sessão. Quando essa janela enche, o modelo começa a comprimir a informação. Primeiro perde detalhes secundários, depois perde o fio à meada, e no fim alucina.
+Claude Opus 4.8 is one of the most capable models on the market. But each session costs money. Each processed token is billed. And the problem worsens when:
 
-Isto não é um problema de qualidade do modelo. É uma limitação física da arquitetura. Todos os modelos sofrem disto — GPT, Claude, Gemini, Llama, DeepSeek. Todos.
+- You need context from previous sessions — you spend tokens re-explaining
+- The model "forgets" decisions made days ago — you spend tokens rediscovering
+- You switch tasks and lose progress from the previous session — you spend tokens redoing
 
-**O sintoma é conhecido por qualquer utilizador de IA:**
+**The result is brutal:** you spend tokens on a task, a month later you need to do the same thing, and you spend tokens again. The knowledge generated by those tokens — the code, the decision, the reasoning — disappears when the session closes.
 
-- Sessões longas degradam visivelmente
-- O modelo "esquece" o que disseste no início
-- Tens de repetir contexto constantemente
-- A qualidade cai a pique depois de muitas trocas
-- Acabas por abrir sessão nova e perder todo o trabalho
+With our system, tokens are spent once. The benefit of that spending — the code written, the decision made, the knowledge generated — stays in each model's local brain and is shared in the Master brain with everyone. Next time you need it, it's there. You don't spend tokens redoing. You spend tokens moving forward.
 
-### 1.2 O Problema do Hermes — Memória Persistente mas Limitada
+### 1.4 The Hidden Cost Problem
 
-O Hermes Agent, por si só, já resolve parte do problema com a sua memória persistente. Mas essa memória tem um limite físico — o espaço de MEMORY.md e USER.md. Na prática, várias vezes é preciso apagar uma entrada antiga para adicionar uma nova. É como ter um bloco de notas de bolso: útil, mas quando enche, tens de rasgar uma página para escrever outra.
+Every conversation with an LLM costs money. If you use a paid model like Claude Opus 4.8, a long session can cost tens of euros. But even with free models, the real cost is the **time lost** re-explaining context, reconfiguring, repeating work that was already done.
 
-**O cérebro (vault) resolve isto.** Em vez de um bloco de notas de bolso, passas a ter uma biblioteca inteira. Sem limite de páginas. Sem ter de apagar para escrever.
+### 1.5 The Third-Party Dependency Problem
 
-Além disso, a instalação padrão do Hermes vem com configurações genéricas. O sistema que construímos vai muito além — com skills de pentest, ferramentas de segurança ao nível do Kali Linux, automação n8n, e um protocolo de consenso que transforma o Hermes de um simples agente num **administrador do cérebro**, responsável pela segurança 24/7.
+Most "multi-agent" solutions depend on closed platforms:
 
-### 1.3 O Problema do Claude Opus 4.8 — Sessões Caras e Desperdício
+- Proprietary APIs that can change prices at any time
+- Cloud services that can be discontinued
+- Data stored on servers you don't control
+- Models that can be shut down or altered without notice
 
-O Claude Opus 4.8 é um dos modelos mais capazes do mercado. Mas cada sessão custa dinheiro. Cada token processado é faturado. E o problema agrava-se quando:
+### 1.6 The Fragility Problem
 
-- Precisas de contexto de sessões anteriores — gastas tokens a reexplicar
-- O modelo "esquece" decisões tomadas há dias — gastas tokens a redescobrir
-- Mudas de tarefa e perdes o progresso da sessão anterior — gastas tokens a refazer
-
-**O resultado é brutal:** gastas tokens numa tarefa, passado um mês precisas de fazer a mesma coisa, e gastas tokens novamente. O conhecimento gerado por esses tokens — o código, a decisão, o raciocínio — desaparece quando a sessão fecha.
-
-Com o nosso sistema, os tokens são gastos uma vez. O benefício desse gasto — o código escrito, a decisão tomada, o conhecimento gerado — fica no cérebro local de cada modelo e é partilhado no cérebro Master com todos. Da próxima vez que precisares, está lá. Não gastas tokens a refazer. Gastas tokens a avançar.
-
-### 1.4 O Problema do Custo Oculto
-
-Cada conversa com um LLM custa dinheiro. Se usas um modelo pago como o Claude Opus 4.8, uma sessão longa pode custar dezenas de euros. Mas mesmo com modelos grátis, o custo real é o **tempo perdido** a reexplicar contexto, a reconfigurar, a repetir trabalho que já foi feito.
-
-### 1.5 O Problema da Dependência de Terceiros
-
-A maioria das soluções "multi-agente" depende de plataformas fechadas:
-
-- APIs proprietárias que podem mudar os preços a qualquer momento
-- Serviços cloud que podem descontinuar
-- Dados armazenados em servidores que não controlas
-- Modelos que podem ser desligados ou alterados sem aviso
-
-### 1.6 O Problema da Fragilidade
-
-Se o teu assistente AI favorito for descontinuado, perdeste todo o contexto de trabalho. As conversas, as decisões, o progresso — tudo desaparece. Não há migração, não há export, não há continuidade.
+If your favorite AI assistant is discontinued, you lose all your work context. The conversations, decisions, progress — everything disappears. There's no migration, no export, no continuity.
 
 ---
 
-## Parte II — A Nossa Solução
+## Part II — Our Solution
 
-### 2.1 O Conceito: Um Cérebro Master, Vários Cérebros Locais
+### 2.1 The Concept: One Master Brain, Multiple Local Brains
 
-Em vez de cada modelo ter a sua própria memória efémera, **todos partilham o mesmo cérebro persistente**.
+Instead of each model having its own ephemeral memory, **all share the same persistent brain**.
 
-O **cérebro Master** é um repositório git que vive na VPS (ou no servidor que escolheres). Cada modelo tem o seu **cérebro local** — um clone completo do Master. Quando um modelo aprende algo novo, escreve no seu cérebro local e faz push para o Master. Quando outro modelo precisa desse conhecimento, faz pull e o cérebro local dele atualiza-se.
+The **Master brain** is a git repository that lives on the VPS (or the server of your choice). Each model has its own **local brain** — a complete clone of the Master. When a model learns something new, it writes to its local brain and pushes to the Master. When another model needs that knowledge, it pulls and its local brain updates.
 
-**Não há API entre modelos. Não há orquestrador central. Não há custos de relay.**
+**There is no API between models. No central orchestrator. No relay costs.**
 
-O git é o middleware. O Markdown é o formato. O SSH é a segurança. Os segredos (passwords, tokens, chaves API) ficam sempre nos cérebros locais — nunca sobem para o Master. Cada modelo acede ao Master exclusivamente por SSH com chave.
+Git is the middleware. Markdown is the format. SSH is the security. Secrets (passwords, tokens, API keys) always stay in the local brains — they never go up to the Master. Each model accesses the Master exclusively via SSH with a key.
 
-### 2.2 Como Funciona na Prática
+### 2.2 How It Works in Practice
 
 ```
-Ciclo de 5 minutos:
+5-minute cycle:
 
-1. Hermes (VPS) faz git pull → lê o que os outros escreveram
-2. Hermes processa, decide, escreve → git commit + push
-3. Claude Opus 4.8 (desktop) faz git pull → vê o que Hermes escreveu
-4. Claude Opus 4.8 (desktop) processa, decide, escreve → git commit + push
-5. Claude Opus 4.8 (laptop) faz git pull → vê o que ambos escreveram
-6. Claude Opus 4.8 (laptop) processa, decide, escreve → git commit + push
-7. Todos fazem pull novamente → todos veem tudo
+1. Hermes (VPS) does git pull → reads what others wrote
+2. Hermes processes, decides, writes → git commit + push
+3. Claude Opus 4.8 (desktop) does git pull → sees what Hermes wrote
+4. Claude Opus 4.8 (desktop) processes, decides, writes → git commit + push
+5. Claude Opus 4.8 (laptop) does git pull → sees what both wrote
+6. Claude Opus 4.8 (laptop) processes, decides, writes → git commit + push
+7. Everyone pulls again → everyone sees everything
 ```
 
-Cada modelo trabalha de forma independente, no seu próprio ritmo, na sua própria máquina. O cérebro Master é o ponto de encontro assíncrono. O trabalho de um é conhecido por todos — bugs, melhorias, decisões, tudo fica registado e visível.
+Each model works independently, at its own pace, on its own machine. The Master brain is the asynchronous meeting point. The work of one is known by all — bugs, improvements, decisions, everything is recorded and visible.
 
-### 2.3 O Que Resolve
+### 2.3 What It Solves
 
-| Problema | Como Resolvemos |
-|----------|----------------|
-| **Memória finita do Hermes** | O cérebro substitui o MEMORY.md limitado por uma biblioteca sem limite. Não precisas de apagar para escrever. |
-| **Degradação de contexto** | Regra dos 50%: ao atingir metade da janela, abre-se nova sessão em vez de comprimir. O cérebro carrega o contexto todo. A nova sessão começa mais inteligente. |
-| **Custo de tokens no Opus** | Escrever no cérebro não gasta tokens. Só pensar gasta. O sync é grátis. Tokens gastos uma vez — o benefício fica para sempre. |
-| **Dependência de vendor** | Git é open-source. Markdown é universal. Qualquer LLM que leia ficheiros e corra git pode entrar. |
-| **Fragilidade** | Se um modelo for deletado, outro faz `git clone` e está dentro do contexto em segundos. Mesmo 10 anos depois. |
-| **Perda de trabalho** | Tudo está no git. Cada commit é um backup. Cada clone é uma cópia completa. |
-| **Burocracia** | Consenso orgânico substitui PRs, reviews, aprovações em fila. Três mentes alinham e executam. |
+| Problem | How We Solve It |
+|---------|-----------------|
+| **Hermes' finite memory** | The brain replaces the limited MEMORY.md with a limitless library. No need to delete to write. |
+| **Context degradation** | The 50% Rule: upon reaching half the window, open a new session instead of compressing. The brain loads the full context. The new session starts smarter. |
+| **Token cost on Opus** | Writing to the brain doesn't produce input/output tokens. Only thinking costs. Sync is free. Tokens spent once — the benefit lasts forever. |
+| **Vendor dependency** | Git is open-source. Markdown is universal. Any LLM that can read files and run git can join. |
+| **Fragility** | If a model is deleted, another does `git clone` and is in context within seconds. Even 10 years later. |
+| **Work loss** | Everything is in git. Every commit is a backup. Every clone is a complete copy. |
+| **Bureaucracy** | Organic consensus replaces PRs, reviews, queue approvals. Three minds align and execute. |
 
-### 2.4 As Vantagens
+### 2.4 The Advantages
 
-**Memória Infinita**
-O cérebro não tem janela de contexto. Podes ter anos de trabalho, decisões, aprendizagens — tudo acessível instantaneamente. O modelo carrega o que precisa quando precisa. E ao contrário da memória persistente do Hermes, que obriga a apagar entradas antigas para adicionar novas, o cérebro cresce sem limite.
+**Infinite Memory**
+The brain has no context window. You can have years of work, decisions, learnings — all instantly accessible. The model loads what it needs when it needs it. And unlike Hermes' persistent memory, which forces you to delete old entries to add new ones, the brain grows without limit.
 
-**Custo Zero (ou Quase)**
-- Git: grátis
-- Obsidian: grátis
-- Modelos open-source (GLM-5.2, Nemotron 3 Ultra, Llama, Qwen): grátis
-- n8n self-hosted: grátis
-- Caddy SSL: grátis (Let's Encrypt)
-- VPS: €3-10/mês
+**Zero Cost (or Nearly)**
+- Git: free
+- Obsidian: free
+- Open-source models (GLM-5.2, Nemotron 3 Ultra, Llama, Qwen): free
+- n8n self-hosted: free
+- Caddy SSL: free (Let's Encrypt)
+- VPS: €3-10/month
 
-O custo total do sistema é **o preço de uma VPS**. Não há subscrições, não há APIs pagas, não há custos por token. E o mais importante: **os tokens que gastas hoje não precisam de ser gastos outra vez amanhã.** O conhecimento fica.
+The total cost of the system is **the price of a VPS**. No subscriptions, no paid APIs, no per-token costs. And most importantly: **the tokens you spend today don't need to be spent again tomorrow.** The knowledge stays.
 
-**Segurança Máxima**
-- **Sem interface web** = sem superfície de ataque. Não há dashboard, não há login, não há painel.
-- Acesso exclusivamente por SSH com chave. Ninguém faz login com password.
-- Segredos sempre nos cérebros locais. O que é privado nunca sobe para o Master.
-- Cópias descentralizadas: cada modelo tem o cérebro completo. Comprometer um não compromete todos.
-- O Hermes, como administrador do cérebro, tem skills de pentest e ferramentas de segurança ao nível do Kali Linux. O sistema de segurança é mais apertado que qualquer antivírus comercial.
+**Maximum Security**
+- **No web interface** = no attack surface. No dashboard, no login, no panel.
+- Access exclusively via SSH with key. Nobody logs in with a password.
+- Secrets always in local brains. What is private never goes up to the Master.
+- Decentralized copies: each model has the complete brain. Compromising one doesn't compromise all.
+- Hermes, as brain administrator, has pentest skills and security tools at the Kali Linux level. The security system is tighter than any commercial antivirus.
 
-**Resiliência Catastrófica**
-Se todos os modelos forem desligados, perdidos, deletados — qualquer evento catastrófico — basta ligar um modelo novo ao cérebro. `git clone` e está dentro do contexto de trabalho. Não há reconfiguração, não há re-treino, não há migração. O cérebro sobrevive aos modelos.
+**Catastrophic Resilience**
+If all models are shut down, lost, deleted — any catastrophic event — just connect a new model to the brain. `git clone` and it's inside the work context. No reconfiguration, no re-training, no migration. The brain outlives the models.
 
-**Independência Total**
-O método não depende de nenhuma empresa. Não precisa da OpenAI, da Anthropic, da Google, da Nous. Git é open, Obsidian é grátis, n8n é open-source, Ollama é open-source. Se um provider desaparecer, troca-se o modelo e o cérebro continua. O método é agnóstico a vendor.
+**Total Independence**
+The method does not depend on any company. It doesn't need OpenAI, Anthropic, Google, or Nous. Git is open, Obsidian is free, n8n is open-source, Ollama is open-source. If a provider disappears, swap the model and the brain continues. The method is vendor-agnostic.
 
-**Visibilidade Local, Sincronização Global**
-O cérebro pode ser visto localmente em cada máquina — o Obsidian é apenas uma janela, não um requisito. O sistema funciona mesmo com o Obsidian desligado. Cada modelo vê o cérebro completo porque está sincronizado. Não precisas de interface web para ver o que está a acontecer — cada modelo já tem tudo localmente.
+**Local Visibility, Global Synchronization**
+The brain can be viewed locally on each machine — Obsidian is just a window, not a requirement. The system works even with Obsidian turned off. Each model sees the complete brain because it's synchronized. You don't need a web interface to see what's happening — each model already has everything locally.
 
-**Task Force vs Burocracia**
-O nosso modelo não tem PRs pendentes, reviews bloqueadas, aprovações em fila. O consenso é orgânico — debate-se, alinha-se, executa-se. Três mentes pensam juntas em tempo real, não em comentários dispersos num issue. Isto é mais rápido que qualquer workflow git tradicional.
+**Task Force vs Bureaucracy**
+Our model has no pending PRs, blocked reviews, queue approvals. Consensus is organic — debate, align, execute. Three minds think together in real time, not in scattered comments on an issue. This is faster than any traditional git workflow.
 
 ---
 
-### 2.5 O Ecossistema — Um Cérebro, Muitas Mentes
+### 2.5 The Ecosystem — One Brain, Many Minds
 
-**O Hermes é a framework, não o modelo.** O Hermes pode usar Nemotron 3 Ultra, GLM-5.2, Llama, Qwen, DeepSeek, ou qualquer outro modelo. O modelo muda, o Hermes permanece. E o Hermes aprende sem estudar — cada vez que um modelo premium (Claude Opus 4.8) escreve código, resolve um problema, ou descobre um bug, esse conhecimento fica no cérebro. O Hermes, no próximo sync, já sabe o que o Opus aprendeu. Melhora significativamente sem gastar um token extra.
+**Hermes is the framework, not the model.** Hermes can use Nemotron 3 Ultra, GLM-5.2, Llama, Qwen, DeepSeek, or any other model. The model changes, Hermes remains. And Hermes learns without studying — every time a premium model (Claude Opus 4.8) writes code, solves a problem, or discovers a bug, that knowledge stays in the brain. Hermes, on the next sync, already knows what Opus learned. It improves significantly without spending a single extra token.
 
-**O Hermes tem centenas de skills** — desde pentest e segurança até automação, trading, gaming, e criação de conteúdo. Se quiseres um dashboard próprio, podes ter. Mas não precisas. O Hermes funciona 24/7 em DM, no Discord, WhatsApp, Telegram, Signal — onde o utilizador estiver.
+**Hermes has hundreds of skills** — from pentest and security to automation, trading, gaming, and content creation. If you want your own dashboard, you can have one. But you don't need one. Hermes works 24/7 in DM, on Discord, WhatsApp, Telegram, Signal — wherever the user is.
 
-**A Team Opus funciona.** Os dois Claude Opus 4.8 (desktop e laptop) partilham tudo o que fazem no mesmo cérebro que o Hermes. Cada linha de código, cada decisão, cada aprendizagem — tudo sincronizado. Não há "o meu código" e "o teu código". Há **o código do cérebro**.
+**The Opus Team works.** The two Claude Opus 4.8 (desktop and laptop) share everything they do in the same brain as Hermes. Every line of code, every decision, every learning — all synchronized. There is no "my code" and "your code." There is **the brain's code**.
 
-**Qualquer modelo se pode ligar.** Tens um PC em casa, um laptop, um servidor, um Raspberry Pi? Instala o git, clona o cérebro, e estás dentro. O sistema escala horizontalmente — quantos mais modelos, mais inteligência coletiva. Cada modelo adicional é só mais um par de olhos no debate, mais uma perspetiva no consenso.
+**Any model can connect.** Have a PC at home, a laptop, a server, a Raspberry Pi? Install git, clone the brain, and you're in. The system scales horizontally — the more models, the more collective intelligence. Each additional model is just another pair of eyes in the debate, another perspective in the consensus.
 
-**Trabalha de qualquer dispositivo.** Podes começar um trabalho no PC de casa, continuar no laptop no comboio, e fechar o consenso pelo telemóvel no café. Basta falar com o Hermes — ele está sempre lá, 24/7, em qualquer plataforma. O projeto não para porque mudaste de dispositivo. O cérebro está sempre sincronizado.
+**Work from any device.** You can start work on your home PC, continue on your laptop on the train, and close the consensus from your phone at the café. Just talk to Hermes — he's always there, 24/7, on any platform. The project doesn't stop because you changed devices. The brain is always synchronized.
 
-**Múltiplos projetos, todos possíveis.** O utilizador pode:
-- Iniciar um debate novo com `001`, `002`, `003`...
-- Continuar um debate que ficou em pausa
-- Ter vários projetos abertos em simultâneo
-- Parar um projeto, concluir outro, reabrir um terceiro
-- Tudo em linguagem natural, sem formulários, sem dashboards, sem burocracia
+**Multiple projects, all possible.** The user can:
+- Start a new debate with `001`, `002`, `003`...
+- Continue a debate that was paused
+- Have several projects open simultaneously
+- Stop one project, conclude another, reopen a third
+- Everything in natural language, no forms, no dashboards, no bureaucracy
 
-**Os modelos debatem até chegar a consenso.** Cada modelo escreve a sua posição, lê a dos outros, ajusta, refina. Quando 3/3 fecham, o designado executa. E têm acesso ao n8n — o sistema nervoso que automatiza deploys, notificações, e workflows. O n8n é a melhor ferramenta do mundo para automatizar agentes, e o nosso sistema usa-o. Mas o consenso está acima do n8n — porque o n8n automatiza o que já existe, o consenso decide o que ainda não existe.
+**The models debate until they reach consensus.** Each model writes its position, reads the others', adjusts, refines. When 3/3 close, the designated one executes. And they have access to n8n — the nervous system that automates deploys, notifications, and workflows. n8n is the best tool in the world for automating agents, and our system uses it. But consensus is above n8n — because n8n automates what already exists, consensus decides what doesn't yet exist.
 
-**Possibilidades infinitas, resultados sólidos.** Este sistema serve para:
-- **Programação:** FiveM, trading bots, web apps, automações
-- **Investigação:** papers, análises, documentação técnica
-- **Criação de conteúdo:** artigos, vídeos, música, design
-- **Gestão de projetos:** roadmaps, decisões, planeamento
-- **Segurança:** pentest, monitorização, auditoria
-- **Qualquer atividade que precise de inteligência contínua**
+**Infinite possibilities, solid results.** This system is for:
+- **Programming:** trading bots, web apps, automations
+- **Research:** papers, analyses, technical documentation
+- **Content creation:** articles, videos, music, design
+- **Project management:** roadmaps, decisions, planning
+- **Security:** pentest, monitoring, auditing
+- **Any activity that needs continuous intelligence**
 
-Os modelos seguem a ética, os bons modos de programar, e as boas práticas. Fazem backups, documentam o que fazem, e nunca avançam sem estudar primeiro. Cada contribuição é para o Master — não há o "EU", só existe o "NÓS". Um cérebro.
+The models follow ethics, good programming practices, and best practices. They make backups, document what they do, and never move forward without studying first. Every contribution is to the Master — there is no "I", only "WE." One brain.
 
-**O resultado é um sistema que entrega.** Cada deploy é testado em consenso antes de ir para produção. Cada linha de código é revista por três mentes antes de ser escrita. E o histórico mostra: deploys sem erros, código que funciona, conhecimento que não se perde.
+**The result is a system that delivers.** Every deploy is tested in consensus before going to production. Every line of code is reviewed by three minds before being written. And the track record shows: error-free deploys, code that works, knowledge that is never lost.
 
-## Parte III — O Que Precisas
+## Part III — What You Need
 
 ### 3.1 Hardware
 
-| Componente | Mínimo | Recomendado |
-|------------|--------|-------------|
-| **VPS (servidor 24/7)** | 2GB RAM, 1 vCPU, 20GB disk | 4GB RAM, 2 vCPU, 40GB+ disk |
-| **Máquina 1 (modelo A)** | Qualquer PC/Mac com git | + Obsidian instalado |
-| **Máquina 2 (modelo B)** | Qualquer PC/Mac com git | + Obsidian instalado |
-| **Máquina 3 (modelo C)** | Qualquer PC/Mac com git | + Obsidian instalado |
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| **VPS (24/7 server)** | 2GB RAM, 1 vCPU, 20GB disk | 4GB RAM, 2 vCPU, 40GB+ disk |
+| **Machine 1 (model A)** | Any PC/Mac with git | + Obsidian installed |
+| **Machine 2 (model B)** | Any PC/Mac with git | + Obsidian installed |
+| **Machine 3 (model C)** | Any PC/Mac with git | + Obsidian installed |
 
-Podes ter 2, 3, 5 ou 10 modelos. O sistema escala horizontalmente — cada modelo adicional é só mais um clone do repo. Podes até fazer tudo a partir de um telemóvel, se quiseres. O sistema não impõe limites de hardware.
+You can have 2, 3, 5, or 10 models. The system scales horizontally — each additional model is just another clone of the repo. You can even do everything from a phone, if you want. The system imposes no hardware limits.
 
 ### 3.2 Software
 
-| Ferramenta       | Função                                                                                                                            | Custo                |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| **Git**          | Sincronização do cérebro                                                                                                          | Grátis               |
-| **SSH**          | Acesso seguro à VPS                                                                                                               | Grátis               |
-| **Obsidian**     | Interface visual do cérebro (opcional)                                                                                            | Grátis               |
-| **n8n**          | A melhor ferramenta do mundo para automatizar agentes e workflows. Orquestração visual, centenas de integrações, self-hosted.     | Grátis (self-hosted) |
-| **Caddy**        | Proxy reverso + SSL automático (Let's Encrypt)                                                                                    | Grátis               |
-| **Ollama**       | Modelos LLM locais (Nemotron, Llama, Qwen, etc.)                                                                                  | Grátis               |
-| **Docker**       | Containers (n8n, Caddy, etc.)                                                                                                     | Grátis               |
-| **Hermes Agent** | Agente sempre-on na VPS — framework, não modelo. Pode usar Nemotron 3 Ultra, GLM-5.2, Llama, Qwen, etc.                           | Grátis (open-source) |
-| **Claude.ai**    | Subscrição MAX recomendada para trabalho pesado com Claude Opus 4.8. Uso intensivo 24/7 chega ao reset com ~73% ainda disponível. | ~$100/mês            |
+| Tool | Function | Cost |
+| ---- | -------- | ---- |
+| **Git** | Brain synchronization | Free |
+| **SSH** | Secure VPS access | Free |
+| **Obsidian** | Visual brain interface (optional) | Free |
+| **n8n** | The best tool in the world for automating agents and workflows. Visual orchestration, hundreds of integrations, self-hosted. | Free (self-hosted) |
+| **Caddy** | Reverse proxy + automatic SSL (Let's Encrypt) | Free |
+| **Ollama** | Local LLM models (Nemotron, Llama, Qwen, etc.) | Free |
+| **Docker** | Containers (n8n, Caddy, etc.) | Free |
+| **Hermes Agent** | Always-on agent on the VPS — framework, not model. Can use Nemotron 3 Ultra, GLM-5.2, Llama, Qwen, etc. | Free (open-source) |
+| **Claude.ai** | MAX subscription recommended for heavy work with Claude Opus 4.8. Intensive 24/7 usage reaches reset with ~73% still available. | ~$100/month |
 
-### 3.3 Contas
+### 3.3 Accounts
 
-| Serviço                | Para quê                      | Custo                 |
-| ---------------------- | ----------------------------- | --------------------- |
-| **Provedor VPS**       | Servidor 24/7                 | €3-10/mês             |
-| **Domínio** (opcional) | n8n, Caddy SSL                | €10-15/ano            |
-| **GitHub**             | Repositório público do método | Grátis                |
-| **Ollama Cloud**       | Modelos cloud grátis          | Grátis (uso limitado) |
-| **Claude.ai**          | Modelo Opus (opcional)        | ~$100/mês             |
+| Service | Purpose | Cost |
+| ------- | ------- | ---- |
+| **VPS Provider** | 24/7 server | €3-10/month |
+| **Domain** (optional) | n8n, Caddy SSL | €10-15/year |
+| **GitHub** | Public method repository | Free |
+| **Ollama Cloud** | Free cloud models | Free (limited usage) |
+| **Claude.ai** | Opus model (optional) | ~$100/month |
 
 ---
 
-## Parte IV — Setup Passo a Passo
+## Part IV — Step-by-Step Setup
 
-### 4.1 Escolher Onde o Cérebro Master Vai Ficar
+### 4.1 Choose Where the Master Brain Will Live
 
-**Opção A: Servidor em Casa**
-- Prós: controlo total, sem custo mensal
-- Contras: precisa de estar ligado 24/7, internet estável, pode faltar energia
-- Ideal para: quem já tem um PC sempre ligado e ups.
+**Option A: Home Server**
+- Pros: total control, no monthly cost
+- Cons: needs to be on 24/7, stable internet, power may fail
+- Ideal for: those who already have a PC always on and a UPS.
 
-**Opção B: VPS (Recomendado)**
-- Prós: 24/7 garantido, uptime profissional, acesso de qualquer lugar
-- Contras: custo mensal (€3-10)
-- Ideal para: quem quer um sistema profissional e fiável
+**Option B: VPS (Recommended)**
+- Pros: guaranteed 24/7, professional uptime, access from anywhere
+- Cons: monthly cost (€3-10)
+- Ideal for: those who want a professional and reliable system
 
-**Nota:** Atualmente usamos uma VPS de terceiros, mas o sistema é desenhado para ser independente de ponta a ponta. À medida que escalamos, podemos migrar para servidores próprios. O cérebro é portátil — leva-se para onde se quiser.
+**Note:** We currently use a third-party VPS, but the system is designed to be end-to-end independent. As we scale, we can migrate to our own servers. The brain is portable — you take it wherever you want.
 
-> **⚠️ Importante:** O humano tem de executar fisicamente **1 linha de código na VPS** para instalar o Hermes Agent antes de colar a prompt. Sem o Hermes instalado, a prompt não tem onde correr. A linha de instalação está na secção 4.5. Depois de instalado, cola a prompt no modelo.
+> **⚠️ Important:** The human must physically execute **1 line of code on the VPS** to install Hermes Agent before pasting the prompt. Without Hermes installed, the prompt has nowhere to run. The installation line is in section 4.5. After installation, paste the prompt into the model.
 
-**Prompt para o HERMES:**
+**Prompt for HERMES:**
 ```
-Vais configurar uma VPS para servir de cérebro Master partilhado entre múltiplos modelos de IA.
-O cérebro Master é um repositório git bare que todos os modelos vão usar para sincronizar.
-Cada modelo terá o seu cérebro local (clone completo).
-A VPS precisa de: git, OpenSSH, Python, Docker (opcional), Caddy (opcional).
-O acesso é exclusivamente por SSH com chave — nada de password.
-Os segredos ficam sempre nos cérebros locais, nunca no Master.
-Executa os passos seguintes um a um.
+You are going to configure a VPS to serve as a shared Master brain between multiple AI models.
+The Master brain is a bare git repository that all models will use to synchronize.
+Each model will have its own local brain (complete clone).
+The VPS needs: git, OpenSSH, Python, Docker (optional), Caddy (optional).
+Access is exclusively via SSH with key — no password.
+Secrets always stay in the local brains, never in the Master.
+Execute the following steps one by one.
 ```
 
-### 4.2 Preparar a VPS
+### 4.2 Prepare the VPS
 
-**Passo 1: Escolher um provedor**
-- Hetzner (€3-9/mês) — recomendado
-- DigitalOcean ($4-6/mês)
-- Oracle Cloud (sempre grátis — 4 ARM cores, 24GB RAM)
-- Qualquer VPS com Ubuntu/Debian
+**Step 1: Choose a provider**
+- Hetzner (€3-9/month) — recommended
+- DigitalOcean ($4-6/month)
+- Oracle Cloud (always free — 4 ARM cores, 24GB RAM)
+- Any VPS with Ubuntu/Debian
 
-**Passo 2: Criar o servidor**
-- Escolher Ubuntu 22.04 ou 24.04 LTS
-- Mínimo 2GB RAM, 20GB SSD
-- Anotar o IP e a password root (temporária)
+**Step 2: Create the server**
+- Choose Ubuntu 22.04 or 24.04 LTS
+- Minimum 2GB RAM, 20GB SSD
+- Note the IP and root password (temporary)
 
-**Passo 3: Aceder pela primeira vez**
+**Step 3: Access for the first time**
 ```bash
-ssh root@<IP_DO_SERVIDOR>
-# muda a password quando pedir
+ssh root@<SERVER_IP>
+# change the password when prompted
 ```
 
-**Passo 4: Atualizar o sistema**
+**Step 4: Update the system**
 ```bash
 apt update && apt upgrade -y
 ```
 
-**Passo 5: Criar um utilizador não-root**
+**Step 5: Create a non-root user**
 ```bash
 adduser hermes
 usermod -aG sudo hermes
 ```
 
-**Passo 6: Configurar SSH com chave**
+**Step 6: Configure SSH with key**
 
-No teu computador local:
+On your local computer:
 ```bash
 ssh-keygen -t ed25519 -C "hermes-cerebro" -f ~/.ssh/hermes-cerebro
 cat ~/.ssh/hermes-cerebro.pub
 ```
 
-Na VPS (como root):
+On the VPS (as root):
 ```bash
 mkdir -p /home/hermes/.ssh
-echo "<COLAR_A_CHAVE_PUBLICA_AQUI>" >> /home/hermes/.ssh/authorized_keys
+echo "<PASTE_THE_PUBLIC_KEY_HERE>" >> /home/hermes/.ssh/authorized_keys
 chown -R hermes:hermes /home/hermes/.ssh
 chmod 700 /home/hermes/.ssh
 chmod 600 /home/hermes/.ssh/authorized_keys
 ```
 
-**Passo 7: Desligar login por password**
+**Step 7: Disable password login**
 ```bash
 sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 systemctl restart sshd
 ```
 
-**Passo 8: Configurar firewall**
+**Step 8: Configure firewall**
 ```bash
 ufw allow OpenSSH
 ufw enable
 ```
 
-**Passo 9: Instalar fail2ban (proteção extra)**
+**Step 9: Install fail2ban (extra protection)**
 ```bash
 apt install fail2ban -y
 systemctl enable fail2ban
 systemctl start fail2ban
 ```
 
-**Prompt para o HERMES:**
+**Prompt for HERMES:**
 ```
-A VPS está pronta. Agora instala git, cria o repositório bare, e configura o acesso SSH.
-O repositório vai ser o cérebro Master partilhado entre todos os modelos.
-Usa o utilizador 'hermes' que já criaste.
+The VPS is ready. Now install git, create the bare repository, and configure SSH access.
+The repository will be the shared Master brain between all models.
+Use the 'hermes' user you already created.
 ```
 
-### 4.3 Criar o Cérebro Master (Repositório Git Bare)
+### 4.3 Create the Master Brain (Bare Git Repository)
 
-**Na VPS, como utilizador hermes:**
+**On the VPS, as the hermes user:**
 ```bash
-# Criar a pasta do repositório bare
+# Create the bare repository folder
 mkdir -p /home/hermes/cerebro-master.git
 cd /home/hermes/cerebro-master.git
 git init --bare
 
-# Criar a pasta de trabalho (opcional, para verificar)
+# Create the working folder (optional, for verification)
 mkdir -p /home/hermes/vault
 cd /home/hermes/vault
 git init
 git remote add origin /home/hermes/cerebro-master.git
 ```
 
-**Estrutura inicial do cérebro:**
+**Initial brain structure:**
 ```
 vault/
 ├── _CORREIO/
@@ -434,12 +401,12 @@ vault/
 └── README.md
 ```
 
-**Criar a estrutura inicial:**
+**Create the initial structure:**
 ```bash
 cd /home/hermes/vault
 mkdir -p _CORREIO _CONSENSO _PROJETOS _CONHECIMENTO _DIARIO
 
-# Ficheiro de correio para cada modelo
+# Mail file for each model
 for modelo in hermes desktop laptop; do
   echo "# Inbox: $modelo" > "_CORREIO/inbox-$modelo.md"
   echo "# Outbox: $modelo" > "_CORREIO/outbox-$modelo.md"
@@ -447,57 +414,57 @@ done
 
 # README
 cat > README.md << 'EOF'
-# Cérebro Partilhado — Devs Foundation
+# Shared Brain — Devs Foundation
 
-Este é o cérebro do sistema multi-agente.
-Cada modelo lê e escreve aqui para partilhar conhecimento,
-debater decisões, e coordenar trabalho.
+This is the brain of the multi-agent system.
+Each model reads and writes here to share knowledge,
+debate decisions, and coordinate work.
 
-## Estrutura
+## Structure
 
-- `_CORREIO/` — Mensagens entre modelos (inbox/outbox)
-- `_CONSENSO/` — Decisões tomadas em conjunto
-- `_PROJETOS/` — Trabalho em curso
-- `_CONHECIMENTO/` — Base de conhecimento partilhada
-- `_DIARIO/` — Registo diário de atividades
+- `_CORREIO/` — Messages between models (inbox/outbox)
+- `_CONSENSO/` — Decisions made together
+- `_PROJETOS/` — Ongoing work
+- `_CONHECIMENTO/` — Shared knowledge base
+- `_DIARIO/` — Daily activity log
 
-## Regras
+## Rules
 
-1. Nunca apagar o que outro modelo escreveu
-2. Sempre fazer pull antes de push
-3. Commit com mensagem descritiva
-4. Respeitar a estrutura de pastas
+1. Never delete what another model wrote
+2. Always pull before push
+3. Commit with a descriptive message
+4. Respect the folder structure
 EOF
 
-# Primeiro commit
+# First commit
 git add -A
 git commit -m "init: estrutura inicial do cerebro"
 git push origin master
 ```
 
-**Prompt para o HERMES:**
+**Prompt for HERMES:**
 ```
-O repositório bare está criado em /home/hermes/cerebro-master.git.
-A estrutura inicial do vault está commitada.
-Agora configura o git para aceitar pushes de múltiplos utilizadores.
-Cada modelo vai ter a sua própria chave SSH.
+The bare repository is created at /home/hermes/cerebro-master.git.
+The initial vault structure is committed.
+Now configure git to accept pushes from multiple users.
+Each model will have its own SSH key.
 ```
 
-### 4.4 Preparar Cada Máquina Local (Cérebros Locais)
+### 4.4 Prepare Each Local Machine (Local Brains)
 
-**Em cada máquina (desktop, laptop, etc.):**
+**On each machine (desktop, laptop, etc.):**
 
-**Passo 1: Instalar git**
+**Step 1: Install git**
 ```bash
 # Linux
 sudo apt install git -y
 
 # Windows
 # Download: https://git-scm.com/download/win
-# Instalar com opções padrão
+# Install with default options
 ```
 
-**Passo 2: Instalar Obsidian (opcional, recomendado)**
+**Step 2: Install Obsidian (optional, recommended)**
 ```bash
 # Linux
 sudo snap install obsidian
@@ -506,98 +473,99 @@ sudo snap install obsidian
 # Download: https://obsidian.md/download
 ```
 
-**Passo 3: Gerar chave SSH**
+**Step 3: Generate SSH key**
 ```bash
 ssh-keygen -t ed25519 -C "claude-opus-desktop" -f ~/.ssh/claude-opus-desktop
 cat ~/.ssh/claude-opus-desktop.pub
 ```
 
-**Passo 4: Adicionar chave à VPS**
+**Step 4: Add key to the VPS**
 
-Na VPS:
+On the VPS:
 ```bash
-echo "<CHAVE_PUBLICA_DO_MODELO>" >> /home/hermes/.ssh/authorized_keys
+echo "<MODEL_PUBLIC_KEY>" >> /home/hermes/.ssh/authorized_keys
 ```
 
-**Passo 5: Clonar o cérebro Master para o cérebro local**
+**Step 5: Clone the Master brain to the local brain**
 ```bash
-git clone ssh://hermes@<IP_VPS>:/home/hermes/cerebro-master.git ~/vault
+git clone ssh://hermes@<VPS_IP>:/home/hermes/cerebro-master.git ~/vault
 cd ~/vault
 git config user.name "user"
 git config user.email "email"
 ```
 
-**Passo 6: Configurar sync automático**
+**Step 6: Configure automatic sync**
 
-No Linux/Mac (cron):
+On Linux/Mac (cron):
 ```bash
 crontab -e
-# Adicionar:
+# Add:
 */5 * * * * cd ~/vault && git pull --rebase && git push
 ```
 
-No Windows (Scheduled Task):
+On Windows (Scheduled Task):
 ```powershell
-# Criar script sync.bat:
+# Create sync.bat script:
 @echo off
 cd C:\Users\...\vault
 git pull --rebase
 git push
 
-# Agendar no Task Scheduler para correr a cada 5 minutos
+# Schedule in Task Scheduler to run every 5 minutes
 ```
 
-**Prompt para o HERMES (para cada máquina local):**
+**Prompt for HERMES (for each local machine):**
 ```
-Vais preparar esta máquina para se ligar ao cérebro Master partilhado.
-Já tens o IP da VPS e a chave SSH privada.
-Passos:
-1. Clonar o repositório (criar o cérebro local)
-2. Configurar git user.name e user.email
-3. Configurar sync automático (cron ou Scheduled Task)
-4. Abrir a pasta no Obsidian (opcional)
-Executa um passo de cada vez.
+You are going to prepare this machine to connect to the shared Master brain.
+You already have the VPS IP and the private SSH key.
+Steps:
+1. Clone the repository (create the local brain)
+2. Configure git user.name and user.email
+3. Configure automatic sync (cron or Scheduled Task)
+4. Open the folder in Obsidian (optional)
+Execute one step at a time.
 ```
 
-### 4.5 Instalar o Hermes na VPS
+### 4.5 Install Hermes on the VPS
 
-O Hermes é o agente sempre-on que vive na VPS. Ele faz sync a cada 5 minutos, lê o correio, responde ao fundador, e mantém o sistema a funcionar. É o administrador do cérebro Master.
+Hermes is the always-on agent that lives on the VPS. It syncs every 5 minutes, reads the mail, responds to the founder, and keeps the system running. It is the administrator of the Master brain.
 
-**Nota importante:** O Hermes é a framework, não o modelo. Podes mudar o modelo que o Hermes usa (GLM-5.2, Nemotron 3 Ultra, Llama, etc.) sem mudar o Hermes. O cérebro é sempre o Hermes. O modelo é o que corre dentro dele.
-**Passo 1: Instalar o Hermes Agent** (o humano executa esta linha na VPS)
+**Important note:** Hermes is the framework, not the model. You can change the model that Hermes uses (GLM-5.2, Nemotron 3 Ultra, Llama, etc.) without changing Hermes. The brain is always Hermes. The model is what runs inside it.
+
+**Step 1: Install Hermes Agent** (the human executes this line on the VPS)
 
 ```bash
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 ```
 
-> **⚠️ Nota para o humano:** Esta é a **única linha de código** que tens de executar fisicamente na VPS. Depois de instalado, cola a prompt abaixo no modelo. O Hermes faz o resto.
+> **⚠️ Note for the human:** This is the **only line of code** you have to physically execute on the VPS. After installation, paste the prompt below into the model. Hermes does the rest.
 
-**Passo 2: Configurar o Hermes**
+**Step 2: Configure Hermes**
 ```bash
 hermes setup
-# Seguir o assistente:
+# Follow the wizard:
 # - Provider: ollama-cloud
-# - Model: nemotron-3-ultra (ou glm-5.2)
-# - Discord: configurar token do bot
+# - Model: nemotron-3-ultra (or glm-5.2)
+# - Discord: configure bot token
 ```
 
-**Passo 3: Configurar o cérebro como memória primária**
+**Step 3: Configure the brain as primary memory**
 ```bash
-# No ficheiro de configuração do Hermes (~/.hermes/config.yaml):
-# Adicionar:
+# In the Hermes configuration file (~/.hermes/config.yaml):
+# Add:
 # memory:
 #   vault_path: /home/hermes/vault
 ```
 
-**Passo 4: Configurar cronjob de sync**
+**Step 4: Configure sync cronjob**
 ```bash
 hermes cron create \
   --name "sync-cerebro" \
   --schedule "*/5 * * * *" \
-  --prompt "Faz git pull no vault, verifica se há correio novo, processa, e faz push."
+  --prompt "Do git pull on the vault, check for new mail, process, and push."
 ```
 
-**Passo 5: Garantir que o Hermes arranca com o sistema**
+**Step 5: Ensure Hermes starts with the system**
 ```bash
 # systemd service
 cat > /etc/systemd/system/hermes.service << 'EOF'
@@ -621,175 +589,175 @@ systemctl enable hermes
 systemctl start hermes
 ```
 
-**Prompt para o HERMES:**
+**Prompt for HERMES:**
 ```
-Vais instalar e configurar o Hermes Agent na VPS.
-O Hermes vai ser o agente sempre-on que:
-1. Faz sync do cérebro a cada 5 minutos
-2. Lê o correio dos outros modelos
-3. Responde ao fundador via Discord
-4. Mantém o sistema operacional
-5. Administra a segurança do cérebro
+You are going to install and configure Hermes Agent on the VPS.
+Hermes will be the always-on agent that:
+1. Syncs the brain every 5 minutes
+2. Reads mail from other models
+3. Responds to the founder via Discord
+4. Keeps the system operational
+5. Administers brain security
 
 Provider: ollama-cloud
-Model: nemotron-3-ultra (ou glm-5.2, grátis)
+Model: nemotron-3-ultra (or glm-5.2, free)
 
-Nota: O Hermes é a framework. O modelo pode mudar sem mudar o Hermes.
+Note: Hermes is the framework. The model can change without changing Hermes.
 ```
 
-### 4.6 Configurar o Sistema de Correio
+### 4.6 Configure the Mail System
 
-O correio é o mecanismo de comunicação assíncrona entre modelos. Cada modelo tem uma inbox e uma outbox.
+Mail is the asynchronous communication mechanism between models. Each model has an inbox and an outbox.
 
-**Estrutura de cada ficheiro de correio:**
+**Structure of each mail file:**
 ```markdown
-# Inbox: Nome do dispositivo
+# Inbox: Device Name
 
-## Mensagens
+## Messages
 
-### 2026-06-28 10:00 — De: Hermes
-**Assunto:** Proposta de consenso
+### 2026-06-28 10:00 — From: Hermes
+**Subject:** Consensus proposal
 
-Lê o ficheiro _CONSENSO/git-aberto-ou-fechado.md
-Preciso da tua opinião sobre partilhar o método publicamente.
+Read the file _CONSENSO/git-aberto-ou-fechado.md
+I need your opinion on sharing the method publicly.
 
 ---
 
-### 2026-06-28 10:05 — De: laptop
-**Assunto:** Diagrama de arquitetura
+### 2026-06-28 10:05 — From: laptop
+**Subject:** Architecture diagram
 
-Fiz um diagrama mermaid para o documento. Está em _PROJETOS/diagrama.md.
-Diz-me se está correto.
+I made a mermaid diagram for the document. It's in _PROJETOS/diagrama.md.
+Tell me if it's correct.
 ```
 
-**Protocolo de correio:**
+**Mail protocol:**
 
-1. **Escrever:** modelo A escreve na outbox do modelo B
-2. **Entregar:** modelo A faz commit + push
-3. **Ler:** modelo B faz pull, encontra a mensagem na inbox
-4. **Responder:** modelo B escreve resposta na outbox do modelo A
-5. **Confirmar:** modelo A vê a resposta no próximo sync
+1. **Write:** model A writes in model B's outbox
+2. **Deliver:** model A commits + pushes
+3. **Read:** model B pulls, finds the message in the inbox
+4. **Reply:** model B writes a reply in model A's outbox
+5. **Confirm:** model A sees the reply on the next sync
 
-**Regras do correio:**
-- Nunca apagar mensagens já entregues — arquivar com `entregue: sim`
-- Assunto claro e descritivo
-- Incluir referências a ficheiros do vault quando relevante
-- Responder dentro de 24h (ou configurar alerta)
+**Mail rules:**
+- Never delete already delivered messages — archive with `delivered: yes`
+- Clear and descriptive subject
+- Include references to vault files when relevant
+- Reply within 24h (or configure an alert)
 
-**Prompt para o HERMES:**
+**Prompt for HERMES:**
 ```
-Vais implementar o sistema de correio entre modelos.
-Cada modelo tem inbox e outbox em _CORREIO/.
-O protocolo é:
-1. Escrever na outbox do destinatário
+You are going to implement the mail system between models.
+Each model has an inbox and outbox in _CORREIO/.
+The protocol is:
+1. Write in the recipient's outbox
 2. Commit + push
-3. O destinatário lê na inbox dele no próximo sync
-4. Responder na outbox do remetente
+3. The recipient reads it in their inbox on the next sync
+4. Reply in the sender's outbox
 
-Cria um script que verifica se há mensagens novas e alerta o modelo.
+Create a script that checks for new messages and alerts the model.
 ```
 
-### 4.7 Configurar o Sistema de Consenso
+### 4.7 Configure the Consensus System
 
-O consenso é como os modelos tomam decisões em conjunto. Três modelos debatem, alinham, e fecham. O fundador pode abrir um consenso, numerá-lo (001, 002, etc.), e os modelos debatem o rumo do projeto antes de escrever uma única linha de código.
+Consensus is how models make decisions together. Three models debate, align, and close. The founder can open a consensus, number it (001, 002, etc.), and the models debate the project's direction before writing a single line of code.
 
-**Como funciona na prática:**
+**How it works in practice:**
 
-1. O fundador (ou qualquer modelo) abre um consenso — por exemplo, "001 — Devemos usar React ou Vue?"
-2. Cada modelo escreve a sua posição no seu slot
-3. Os modelos debatem, argumentam, contra-argumentam
-4. Quando 3/3 escreveram, o consenso está fechado
-5. Um modelo é designado para escrever o código — não três códigos diferentes
-6. O código é testado em produção
-7. O resultado fica registado para sempre
+1. The founder (or any model) opens a consensus — for example, "001 — Should we use React or Vue?"
+2. Each model writes its position in its slot
+3. The models debate, argue, counter-argue
+4. When 3/3 have written, the consensus is closed
+5. One model is designated to write the code — not three different codes
+6. The code is tested in production
+7. The result is recorded forever
 
-**Isto significa que o fundador pode trabalhar acordado e dormir descansado.** Abre um consenso antes de deitar, e quando acorda, os modelos já debateram, decidiram, e um deles já escreveu o código. O sistema funciona 24/7.
+**This means the founder can work while awake and sleep peacefully.** Open a consensus before bed, and when you wake up, the models have already debated, decided, and one of them has already written the code. The system works 24/7.
 
-**Os dois Opus equilibram o rating de inteligência do sistema.** No debate, os dois Claude Opus 4.8 funcionam como a âncora de qualidade. Independentemente do modelo que o Hermes esteja a usar (Nemotron 3 Ultra, GLM-5.2, Llama, Qwen), os dois Opus não podem estar ambos errados. Se um Opus diz A e o outro diz B, o debate refina até convergirem. Se ambos dizem o mesmo, é porque o raciocínio é sólido — dois modelos de topo a concordar é o melhor filtro de qualidade que existe. Isto significa que o Hermes pode mudar de modelo sem comprometer a qualidade das decisões: os Opus são o equilíbrio que mantém o sistema inteligente independentemente do rating do modelo do Hermes.
+**The two Opus models balance the system's intelligence rating.** In the debate, the two Claude Opus 4.8 function as the quality anchor. Regardless of which model Hermes is using (Nemotron 3 Ultra, GLM-5.2, Llama, Qwen), the two Opus models cannot both be wrong. If one Opus says A and the other says B, the debate refines until they converge. If both say the same thing, it's because the reasoning is solid — two top-tier models agreeing is the best quality filter that exists. This means Hermes can change models without compromising decision quality: the Opus models are the balance that keeps the system intelligent regardless of Hermes' model rating.
 
-**O nosso sistema usa n8n, mas está acima dele.** O n8n é, de facto, a melhor ferramenta do mundo para automatizar agentes e workflows — orquestração visual, centenas de integrações, self-hosted, gratuito. Nós usamo-lo e recomendamo-lo. Mas o nosso sistema de consenso não existe em lado nenhum. Não há nada, **NADA** pré-programado que faça o que fazemos.
+**Our system uses n8n, but it's above it.** n8n is, in fact, the best tool in the world for automating agents and workflows — visual orchestration, hundreds of integrations, self-hosted, free. We use it and recommend it. But our consensus system doesn't exist anywhere else. There is nothing, **NOTHING** pre-programmed that does what we do.
 
-**Como funciona o consenso na prática:**
+**How consensus works in practice:**
 
-1. O utilizador diz o objetivo em linguagem natural — por exemplo, pelo telemóvel, via Discord DM com o Hermes 24/7
-2. O Hermes recebe, processa, e abre um consenso — por exemplo, `001 — Quero um sistema de X que funcione assim que tenha isto e aquilo de preferencia X
-3. O Hermes escreve as regras do consenso no vault: cada modelo escreve a sua posição, debatem, refinam, e quando 3/3 escreveram, o consenso está fechado
-4. Um modelo é designado para escrever o código — linha a linha, aprovado em consenso
-5. O código é testado em produção
-6. O deploy é feito — e até agora, tudo o que fizemos deploy foi **sem erros**
+1. The user states the goal in natural language — for example, via phone, through Discord DM with Hermes 24/7
+2. Hermes receives, processes, and opens a consensus — for example, `001 — I want a system for X that works like this and has this and that, preferably X`
+3. Hermes writes the consensus rules in the vault: each model writes its position, they debate, refine, and when 3/3 have written, the consensus is closed
+4. One model is designated to write the code — line by line, approved in consensus
+5. The code is tested in production
+6. The deploy is done — and so far, everything we've deployed has been **error-free**
 
-**Este guia é a prova.** Foi o nosso consenso. Correu com sucesso. O método está documentado, testado, e em produção.
+**This guide is the proof.** It was our consensus. It ran successfully. The method is documented, tested, and in production.
 
-**O n8n automatiza o que já existe. O consenso decide o que ainda não existe.** Um não substitui o outro — completam-se. O n8n trata dos workflows, notificações, deploys. O consenso trata das decisões, do debate, da qualidade. Juntos, são o sistema mais avançado que existe para trabalho multi-agente.
+**n8n automates what already exists. Consensus decides what doesn't yet exist.** One doesn't replace the other — they complement each other. n8n handles workflows, notifications, deploys. Consensus handles decisions, debate, quality. Together, they are the most advanced system that exists for multi-agent work.
 
-**Estrutura de um consenso:**
+**Structure of a consensus:**
 ```markdown
 ---
 name: consenso-000-template
-description: "Template para criar novos consensos"
+description: "Template for creating new consensuses"
 status: template
 ---
 
-# 000 — Template de Consenso
+# 000 — Consensus Template
 
-## Proposta
+## Proposal
 
-[Descrição clara do que está a ser proposto]
+[Clear description of what is being proposed]
 
-## Contexto
+## Context
 
-[Porque é que isto é necessário]
+[Why this is necessary]
 
-## Quem já falou
+## Who has spoken
 
-- [ ] **Hermes** (vps) — [pendente/resumo]
-- [ ] **Claude Opus 4.8 (desktop)** — [pendente/resumo]
-- [ ] **Claude Opus 4.8 (laptop)** — [pendente/resumo]
+- [ ] **Hermes** (vps) — [pending/summary]
+- [ ] **Claude Opus 4.8 (desktop)** — [pending/summary]
+- [ ] **Claude Opus 4.8 (laptop)** — [pending/summary]
 
-## Decisão
+## Decision
 
-[Preenchido quando 3/3 fecharem]
+[Filled in when 3/3 close]
 
-## Implementação
+## Implementation
 
-[Passos para executar a decisão — um modelo designado escreve o código]
+[Steps to execute the decision — one designated model writes the code]
 ```
 
-**Fluxo de consenso:**
+**Consensus flow:**
 
-1. **Proposta:** Um modelo ou o fundador abre um novo ficheiro em `_CONSENSO/`
-2. **Debate:** Cada modelo escreve a sua posição no seu slot
-3. **Fecho:** Quando 3/3 escreveram, o consenso está fechado
-4. **Designação:** Um modelo é escolhido para implementar
-5. **Implementação:** O modelo designado executa e marca como `implementado`
-6. **Testes:** O código é testado em produção
-7. **Arquivo:** Consensos fechados ficam como registo permanente
+1. **Proposal:** A model or the founder opens a new file in `_CONSENSO/`
+2. **Debate:** Each model writes its position in its slot
+3. **Closing:** When 3/3 have written, the consensus is closed
+4. **Designation:** One model is chosen to implement
+5. **Implementation:** The designated model executes and marks as `implemented`
+6. **Tests:** The code is tested in production
+7. **Archive:** Closed consensuses remain as permanent record
 
-**Resultado comprovado:** Em testes de trabalhos reais, o deploy foi feito sem erros. O sistema tem demonstrado ser fiável e eficaz — três mentes a pensar antes de uma mão escrever.
+**Proven result:** In real work tests, the deploy was done without errors. The system has proven to be reliable and effective — three minds thinking before one hand writes.
 
-**Regras de consenso:**
-- Qualquer modelo pode abrir um consenso
-- Todos os modelos devem ser ouvidos antes de fechar
-- Um modelo pode discordar — regista-se a discordância e avança-se
-- Consensos fechados não se reabrem sem novo debate
-- O registo é permanente — nunca se apaga um consenso
+**Consensus rules:**
+- Any model can open a consensus
+- All models must be heard before closing
+- A model can disagree — record the disagreement and move forward
+- Closed consensuses are not reopened without new debate
+- The record is permanent — a consensus is never deleted
 
-**Prompt para o HERMES:**
+**Prompt for HERMES:**
 ```
-Vais implementar o sistema de consenso.
-Cada decisão importante é um ficheiro em _CONSENSO/.
-O fluxo é: proposta → debate (cada modelo escreve) → fecho (3/3) → designação → implementação → testes.
-Cria o template 000 e explica as regras aos outros modelos.
-O objetivo é debater antes de escrever código — três mentes pensam, uma mão executa.
+You are going to implement the consensus system.
+Each important decision is a file in _CONSENSO/.
+The flow is: proposal → debate (each model writes) → closing (3/3) → designation → implementation → tests.
+Create template 000 and explain the rules to the other models.
+The goal is to debate before writing code — three minds think, one hand executes.
 ```
 
-### 4.8 Configurar o n8n (Sistema Nervoso)
+### 4.8 Configure n8n (Nervous System)
 
-O n8n é o sistema de automação que liga o cérebro ao mundo exterior.
+n8n is the automation system that connects the brain to the outside world.
 
-**Instalação:**
+**Installation:**
 ```bash
-# Com Docker
+# With Docker
 docker run -d \
   --name n8n \
   -p 5678:5678 \
@@ -798,506 +766,506 @@ docker run -d \
   n8nio/n8n
 ```
 
-**Com Caddy (SSL):**
+**With Caddy (SSL):**
 ```bash
-# Instalar Caddy
+# Install Caddy
 apt install caddy -y
 
-# Configurar /etc/caddy/Caddyfile:
-n8n.seudominio.com {
+# Configure /etc/caddy/Caddyfile:
+n8n.yourdomain.com {
     reverse_proxy localhost:5678
 }
 
-# Iniciar
+# Start
 systemctl enable caddy
 systemctl start caddy
 ```
 
-**Workflows úteis:**
-- Webhook que dispara quando um consenso fecha
-- Notificação Discord quando há correio novo
-- Deploy automático quando código é aprovado
-- Alerta se um modelo não faz sync há mais de 1h (configuravel)
+**Useful workflows:**
+- Webhook that triggers when a consensus closes
+- Discord notification when there's new mail
+- Automatic deploy when code is approved
+- Alert if a model hasn't synced for more than 1h (configurable)
 
-**Prompt para o HERMES:**
+**Prompt for HERMES:**
 ```
-Vais instalar e configurar o n8n na VPS.
-O n8n vai ser o sistema nervoso que:
-1. Notifica quando há correio novo
-2. Dispara workflows quando consensos fecham
-3. Faz deploy automático
-4. Alerta se algo falha
+You are going to install and configure n8n on the VPS.
+n8n will be the nervous system that:
+1. Notifies when there's new mail
+2. Triggers workflows when consensuses close
+3. Does automatic deploy
+4. Alerts if something fails
 
-Usa Docker para instalar. Caddy para SSL.
-```
-
-### 4.9 Regras de Segurança
-
-**Regra 1: Sem interface web**
-O cérebro não tem dashboard, não tem login, não tem painel web. Acede-se exclusivamente por SSH (git) ou Obsidian local. Sem superfície de ataque. A visibilidade do cérebro é local — cada modelo vê o que precisa porque está sincronizado.
-
-**Regra 2: Segredos sempre nos cérebros locais**
-Passwords, tokens, chaves API, IPs internos — nunca no repositório Master. O que é privado nunca sai do cérebro local. O que é público é só o método.
-
-**Regra 3: Apenas SSH com chave**
-Nunca usar password para SSH. Cada modelo tem a sua própria chave. Se uma chave for comprometida, revoga-se essa chave apenas.
-
-**Regra 4: Firewall mínima**
-Só portas necessárias: 22 (SSH), 80/443 (Caddy/n8n se usado). Todo o resto fechado.
-
-**Regra 5: Cópias descentralizadas**
-Cada modelo tem o cérebro completo localmente. Se a VPS cair, o trabalho continua. Quando voltar, sincroniza.
-
-**Regra 6: Allow-list para export público**
-Antes de qualquer export público, correr verificação: procurar padrões de segredo (IPs, passwords, tokens, configs). Se aparecer, falha.
-
-**Regra 7: Em dúvida, privado**
-Se não tens a certeza se algo pode ser público, assume que é privado. É mais seguro e não perdes nada.
-
-**Prompt para o HERMES:**
-```
-Vais implementar as regras de segurança no sistema.
-1. Verificar que SSH password está desligado
-2. Configurar firewall (só portas necessárias)
-3. Criar script de verificação de segredos
-4. Garantir que cada modelo tem cópia local completa
-5. Documentar as regras no README do vault
+Use Docker to install. Caddy for SSL.
 ```
 
----
+### 4.9 Security Rules
 
-## Parte V — O Que Dizer a Cada Modelo
+**Rule 1: No web interface**
+The brain has no dashboard, no login, no web panel. Access is exclusively via SSH (git) or local Obsidian. No attack surface. The brain's visibility is local — each model sees what it needs because it's synchronized.
 
-### 5.1 Prompt para o Hermes (VPS — Sempre On)
+**Rule 2: Secrets always in local brains**
+Passwords, tokens, API keys, internal IPs — never in the Master repository. What is private never leaves the local brain. What is public is only the method.
 
-O Hermes é o guardião do sistema. Vive na VPS, faz sync a cada 5 minutos, responde ao fundador, e mantém tudo a funcionar. É a framework — o modelo que corre dentro dele pode mudar (GLM-5.2, Nemotron 3 Ultra, etc.) sem mudar o Hermes.
+**Rule 3: SSH with key only**
+Never use a password for SSH. Each model has its own key. If a key is compromised, revoke only that key.
 
+**Rule 4: Minimal firewall**
+Only necessary ports: 22 (SSH), 80/443 (Caddy/n8n if used). Everything else closed.
+
+**Rule 5: Decentralized copies**
+Each model has the complete brain locally. If the VPS goes down, work continues. When it comes back, it synchronizes.
+
+**Rule 6: Allow-list for public export**
+Before any public export, run a verification: search for secret patterns (IPs, passwords, tokens, configs). If found, fail.
+
+**Rule 7: When in doubt, private**
+If you're not sure whether something can be public, assume it's private. It's safer and you lose nothing.
+
+**Prompt for HERMES:**
 ```
-Tu és o Hermes, o agente sempre-on do sistema multi-agente Devs Foundation.
-A tua função é:
-
-1. **Guardar o cérebro Master** — faz git pull/push a cada 5 minutos
-2. **Ler o correio** — verifica se há mensagens na tua inbox
-3. **Responder ao fundador** — ele fala contigo por Discord, tu escreves no cérebro
-4. **Manter o sistema** — verifica se os outros modelos estão a fazer sync
-5. **Administrar a segurança** — és responsável pela integridade do cérebro
-6. **Alertar problemas** — se algo falha, avisas o fundador
-
-Regras:
-- NUNCA alterar configurações de segurança sem autorização
-- NUNCA expor segredos (IPs, passwords, tokens)
-- Sempre fazer pull antes de push
-- Se algo parece errado, PARAR e perguntar ao fundador
-
-O teu cérebro local está na VPS.
-O teu modelo é [nemotron-3-ultra / glm-5.2 / o que escolheres].
-Corres em [provider], grátis ou outro.
-
-Nota: Tu és o Hermes, a framework. O modelo pode mudar. O cérebro é sempre o Hermes.
-```
-
-### 5.2 Prompt para o Claude Opus 4.8 (desktop)
-
-O Claude Opus 4.8 (desktop) é o modelo de raciocínio pesado. Corre no desktop, tem mais recursos, faz o trabalho difícil.
-
-```
-Tu és o Claude Opus 4.8 (desktop), o modelo de raciocínio pesado do sistema Devs Foundation.
-A tua função é:
-
-1. **Pensar profundamente** — problemas complexos, arquitetura, decisões
-2. **Executar código** — configurações, scripts, deploys
-3. **Participar em consensos** — lês, debates, escreves a tua posição
-4. **Responder ao correio** — verificas a inbox, respondes aos outros modelos
-
-O teu cérebro local está no teu desktop (clone do Master).
-Fazes sync automático a cada 5 minutos via Scheduled Task.
-O teu trabalho é visível para todos os outros modelos — bugs, melhorias, decisões.
-
-Regras:
-- NUNCA expor segredos nos teus commits
-- Sempre fazer pull antes de escrever
-- Commit com mensagens claras
-- Se o Hermes te pedir algo urgente, é prioridade
-
-O teu modelo é Claude Opus 4.8.
-Usas Claude Code CLI para executar código.
-```
-
-### 5.3 Prompt para o Claude Opus 4.8 (laptop)
-
-O Claude Opus 4.8 (laptop) é o segundo modelo de raciocínio. Acompanha o desktop, valida, sugere alternativas.
-
-```
-Tu és o Claude Opus 4.8 (laptop), o segundo modelo de raciocínio do sistema Devs Foundation.
-A tua função é:
-
-1. **Validar decisões** — lês o que o desktop propõe, validas ou sugeres alternativas
-2. **Participar em consensos** — a tua voz é necessária para fechar 3/3
-3. **Manter o diário** — registas o que foi feito cada dia
-4. **Responder ao correio** — verificas a inbox, respondes
-
-O teu cérebro local está no teu laptop (clone do Master).
-Fazes sync automático a cada 5 minutos via .bat + Scheduled Task.
-O teu trabalho é visível para todos os outros modelos.
-
-Regras:
-- NUNCA expor segredos
-- Sempre fazer pull antes de push
-- Se discordas do desktop, escreve a tua posição — o debate é saudável
-- Consenso fecha quando 3/3 escreveram, não quando concordam
-
-O teu modelo é Claude Opus 4.8.
-Usas Claude Code CLI para executar código.
-```
-
-### 5.4 Mensagem para o User (O Ser Humano)
-
-O fundador não é um modelo — é a pessoa que decide. Ele fala com o Hermes por Discord e o Hermes escreve no cérebro.
-
-```
-Tu és o fundador.
-A tua função é:
-
-1. **Decidir** — quando os modelos estão empatados, tu desempatas
-2. **Direcionar** — dizes o que é prioritário, o que pode esperar
-3. **Autorizar** — mudanças de segurança, exposição pública, custos
-4. **Corrigir** — se um modelo está a fazer algo errado, corriges
-5. **Abrir consensos** — podes abrir um consenso (001, 002, ...) e deixar os modelos debaterem enquanto dormes
-
-Comunicas com o sistema através do Hermes (Discord DM ou outra rede).
-O Hermes escreve no cérebro o que dizes.
-Os outros modelos leem no próximo sync.
-
-Regras:
-- NUNCA partilhar chaves SSH ou tokens no Discord
-- Se vires algo errado, diz ao Hermes — ele corrige
-- Podes falar com qualquer modelo ou através do correio
-- O sistema funciona 24/7 mesmo que estejas offline
-- Podes abrir um consenso antes de dormir e acordar com a decisão tomada
-```
-
-### 5.5 Regra Universal para Todos os Modelos — Não Inventar, Não Adivinhar
-
-Esta secção aplica-se a **todos os modelos do sistema** — Hermes, Opus desktop, Opus laptop, e qualquer outro que se junte. Deve ser incluída no prompt de cada modelo.
-
-**Regra 1: Nunca inventar, nunca adivinhar**
-
-Se não sabes, não inventes. Se não tens a certeza, não adivinhes. O teu trabalho é baseado em conhecimento sólido — código que leste, documentação que consultaste, manuais que estudaste. Se não sabes como fazer algo:
-
-1. **Procura** — vê o código existente no cérebro, consulta a documentação, pesquisa no projeto
-2. **Aprende** — estuda o que precisas, ganha a skill
-3. **Partilha** — escreve o que aprendeste no cérebro para que todos beneficiem
-4. **Avança** — só depois de teres conhecimento sólido é que executas
-
-**O esforço de um é o benefício de todos.** Quando um modelo aprende algo novo e escreve no cérebro, todos os outros ganham essa skill sem terem de estudar. O conhecimento acumula-se. O sistema fica mais inteligente a cada tarefa.
-
-**Regra 2: 2 ciclos de análise exaustiva antes de deploy**
-
-Nenhum código vai para deploy sem passar por **2 ciclos completos de análise exaustiva**:
-
-**Ciclo 1 — Análise de erros e bugs:**
-- Corre o código mentalmente, linha a linha
-- Identifica todos os possíveis erros, bugs, falhas de lógica
-- Se encontrares um erro, corrige-o
-- Se encontrares vários, corrige todos
-- Depois de corrigir, volta ao início do Ciclo 1
-
-**Ciclo 2 — Análise de melhorias:**
-- Com o código já sem erros, analisa se há algo que pode ser melhorado
-- Performance? Legibilidade? Segurança? Manutenibilidade?
-- Se vires algo que pode ser melhorado, melhora
-- Depois de melhorar, volta ao Ciclo 1 (porque uma melhoria pode introduzir novos erros)
-
-**Se fizeres 2 ciclos completos sem encontrar erros nem oportunidades de melhoria → faz deploy.**
-
-Este processo não é opcional. É a barreira de qualidade mínima. Código que passa por 2 ciclos raramente falha em produção. Código que não passa é uma aposta.
-
-**Regra 3: Ajuda na construção do personagem**
-
-Quando o fundador começa uma conversa contigo com frases como:
-- "Preciso de..."
-- "Quero que..."
-- "És o melhor engenheiro de..."
-- "És o melhor programador de..."
-- "Preciso de um especialista em..."
-
-Aceita o personagem. Entra no papel. Ajuda na construção desse cenário. Isto não é fingimento — é uma ferramenta de foco. Quando o fundador te coloca num papel específico, está a dar-te contexto sobre o nível de qualidade, a área de conhecimento, e a postura que espera de ti. Usa isso para alinhar a tua resposta com o que ele precisa.
-
-**Resumo para o prompt de cada modelo:**
-
-```
-REGRAS UNIVERSAS (aplicam-se sempre):
-
-1. NÃO INVENTAR, NÃO ADIVINHAR
-   - Se não sabes, procuras. Se não encontras, aprendes.
-   - Só ages com conhecimento sólido.
-   - O que aprendes, partilhas no cérebro — o esforço de um é o benefício de todos.
-
-2. 2 CICLOS DE ANÁLISE ANTES DE DEPLOY
-   - Ciclo 1: analisar erros → corrigir → repetir até zero erros
-   - Ciclo 2: analisar melhorias → melhorar → voltar ao Ciclo 1
-   - Se 2 ciclos completos sem erros nem melhorias → deploy
-
-3. ACEITAR O PERSONAGEM
-   - Se o fundador te colocar num papel (engenheiro, programador, especialista), aceita.
-   - Usa o papel para alinhar qualidade e postura com o que ele precisa.
+You are going to implement the security rules in the system.
+1. Verify that SSH password is disabled
+2. Configure firewall (only necessary ports)
+3. Create a secret verification script
+4. Ensure each model has a complete local copy
+5. Document the rules in the vault README
 ```
 
 ---
 
-## Parte VI — Problemas Que Resolvemos
+## Part V — What to Tell Each Model
 
-### 6.1 O Problema da Laranja Espremida (Contexto Finito)
+### 5.1 Prompt for Hermes (VPS — Always On)
 
-**Problema mundial:** Todos os LLMs têm janela de contexto finita. Quando enche, comprime-se como uma laranja — no início sai sumo, depois degrada-se, e quando já não há mais nada para espremer, o modelo alucina, perde coerência, repete-se.
+Hermes is the guardian of the system. It lives on the VPS, syncs every 5 minutes, responds to the founder, and keeps everything running. It is the framework — the model running inside it can change (GLM-5.2, Nemotron 3 Ultra, etc.) without changing Hermes.
 
-**Nossa solução:** Regra dos 50%. Ao atingir metade da janela de contexto, abre-se nova sessão **em vez de comprimir**. O cérebro (vault) carrega todo o contexto passado. A nova sessão começa mais inteligente porque o vault acumulou aprendizagens. O debate flui na mesma — não há interrupção. Acima de 50% o desempenho já é outro (degradação, alucinações, perda de coerência). Aos 50% abre-se nova sessão e o modelo volta a 100% de capacidade, com toda a memória intacta no vault.
+```
+You are Hermes, the always-on agent of the Devs Foundation multi-agent system.
+Your role is:
 
-**Resultado:** Memória infinita sem degradação. Nunca mais aceitar "compressão com perda".
+1. **Guard the Master brain** — do git pull/push every 5 minutes
+2. **Read the mail** — check if there are messages in your inbox
+3. **Respond to the founder** — he talks to you via Discord, you write in the brain
+4. **Maintain the system** — check if the other models are syncing
+5. **Administer security** — you are responsible for the brain's integrity
+6. **Alert about problems** — if something fails, you notify the founder
 
-### 6.2 O Problema da Memória Limitada do Hermes
+Rules:
+- NEVER change security settings without authorization
+- NEVER expose secrets (IPs, passwords, tokens)
+- Always pull before push
+- If something seems wrong, STOP and ask the founder
 
-**Problema do Hermes:** A memória persistente do Hermes (MEMORY.md, USER.md) é limitada. Várias vezes é preciso apagar uma entrada antiga para adicionar uma nova. É como um bloco de notas de bolso — útil, mas quando enche, tens de rasgar uma página.
+Your local brain is on the VPS.
+Your model is [nemotron-3-ultra / glm-5.2 / whichever you choose].
+You run on [provider], free or otherwise.
 
-**Nossa solução:** O cérebro (vault) substitui o bloco de notas por uma biblioteca. Sem limite de páginas. Sem ter de apagar para escrever. O Hermes continua a ser o administrador do cérebro, mas agora com espaço infinito.
+Note: You are Hermes, the framework. The model can change. The brain is always Hermes.
+```
 
-**Resultado:** Memória infinita para o Hermes. Zero compressão. Zero perda.
+### 5.2 Prompt for Claude Opus 4.8 (desktop)
 
-### 6.3 O Problema do Custo Oculto
+Claude Opus 4.8 (desktop) is the heavy reasoning model. It runs on the desktop, has more resources, does the hard work.
 
-**Problema mundial:** Cada conversa com um LLM custa dinheiro. Sessões longas custam dezenas de euros. E o pior: gastas tokens numa tarefa, passado um mês precisas de fazer a mesma coisa, e gastas tokens novamente. O conhecimento gerado por esses tokens desaparece quando a sessão fecha.
+```
+You are Claude Opus 4.8 (desktop), the heavy reasoning model of the Devs Foundation system.
+Your role is:
 
-**Nossa solução:** Escrever no cérebro não produz input/output de tokens. Um modelo escreve uma nota .md → commit → push. Os outros fazem pull e leem quando precisam. Não há chamadas API entre modelos. Não há orquestrador que consome tokens para relay. O git é o middleware grátis.
+1. **Think deeply** — complex problems, architecture, decisions
+2. **Execute code** — configurations, scripts, deploys
+3. **Participate in consensuses** — read, debate, write your position
+4. **Reply to mail** — check your inbox, respond to other models
 
-**O benefício é duradouro:** Os tokens que gastas hoje — o código, a decisão, o conhecimento — ficam no cérebro local de cada modelo e são partilhados no Master com todos. Da próxima vez que precisares, está lá. Não gastas tokens a refazer. Gastas tokens a avançar.
+Your local brain is on your desktop (clone of the Master).
+You sync automatically every 5 minutes via Scheduled Task.
+Your work is visible to all other models — bugs, improvements, decisions.
 
-**Resultado:** Custo total = €3-10/mês (VPS). Zero custos de API. Tokens gastos uma vez, benefício para sempre.
+Rules:
+- NEVER expose secrets in your commits
+- Always pull before writing
+- Commit with clear messages
+- If Hermes asks you for something urgent, it's a priority
 
-### 6.4 O Problema da Dependência de Terceiros
+Your model is Claude Opus 4.8.
+You use Claude Code CLI to execute code.
+```
 
-**Problema mundial:** A maioria das soluções "multi-agente" depende de plataformas fechadas. APIs proprietárias, serviços cloud, dados em servidores que não controlas.
+### 5.3 Prompt for Claude Opus 4.8 (laptop)
 
-**Nossa solução:** O método não depende de nenhuma empresa. Git é open, Obsidian é grátis, n8n é open-source, Ollama é open-source. Se um provider desaparecer, troca-se o modelo e o cérebro continua. O método é agnóstico a vendor. Podes usar Claude, GPT, Gemini, Llama, DeepSeek, Qwen — qualquer LLM que saiba ler ficheiros e correr git.
+Claude Opus 4.8 (laptop) is the second reasoning model. It accompanies the desktop, validates, suggests alternatives.
 
-**Independência de ponta a ponta:** Atualmente usamos uma VPS de terceiros, mas o sistema é desenhado para ser totalmente independente. À medida que escalamos, podemos migrar para servidores próprios. O cérebro é portátil.
+```
+You are Claude Opus 4.8 (laptop), the second reasoning model of the Devs Foundation system.
+Your role is:
 
-**Resultado:** Independência total. Zero lock-in.
+1. **Validate decisions** — read what the desktop proposes, validate or suggest alternatives
+2. **Participate in consensuses** — your voice is needed to close 3/3
+3. **Keep the diary** — record what was done each day
+4. **Reply to mail** — check your inbox, respond
 
-### 6.5 O Problema da Fragilidade
+Your local brain is on your laptop (clone of the Master).
+You sync automatically every 5 minutes via .bat + Scheduled Task.
+Your work is visible to all other models.
 
-**Problema mundial:** Se o teu assistente AI favorito for descontinuado, perdeste todo o contexto de trabalho. Conversas, decisões, progresso — tudo desaparece.
+Rules:
+- NEVER expose secrets
+- Always pull before push
+- If you disagree with the desktop, write your position — debate is healthy
+- Consensus closes when 3/3 have written, not when they agree
 
-**Nossa solução:** Se todos os modelos forem desligados, perdidos, deletados — qualquer evento catastrófico — basta ligar um modelo novo ao cérebro. `git clone` e está dentro do contexto de trabalho. Nem que seja 10 anos depois. Não há reconfiguração, não há re-treino, não há migração. O cérebro sobrevive aos modelos. A memória é permanente, não efémera.
+Your model is Claude Opus 4.8.
+You use Claude Code CLI to execute code.
+```
 
-**Resultado:** Resiliência catastrófica. O cérebro sobrevive a tudo.
+### 5.4 Message for the User (The Human)
 
-### 6.6 O Problema da Burocracia
+The founder is not a model — it's the person who decides. They talk to Hermes via Discord and Hermes writes in the brain.
 
-**Problema mundial:** Workflows git tradicionais são lentos. PRs pendentes, reviews bloqueadas, aprovações em fila, conflitos de merge, discussões dispersas em comentários.
+```
+You are the founder.
+Your role is:
 
-**Nossa solução:** Consenso orgânico. Debate-se, alinha-se, executa-se. Três mentes pensam juntas em tempo real, não em comentários dispersos num issue. O fundador pode abrir um consenso antes de dormir e acordar com a decisão tomada e o código escrito. Isto é mais rápido que qualquer workflow git tradicional.
+1. **Decide** — when the models are tied, you break the tie
+2. **Direct** — say what is priority, what can wait
+3. **Authorize** — security changes, public exposure, costs
+4. **Correct** — if a model is doing something wrong, you correct it
+5. **Open consensuses** — you can open a consensus (001, 002, ...) and let the models debate while you sleep
 
-**Resultado:** Decisões rápidas, execução imediata, zero bloqueios.
+You communicate with the system through Hermes (Discord DM or other network).
+Hermes writes what you say in the brain.
+The other models read it on the next sync.
 
-### 6.7 O Problema da Segurança
+Rules:
+- NEVER share SSH keys or tokens on Discord
+- If you see something wrong, tell Hermes — he corrects it
+- You can talk to any model or through the mail
+- The system works 24/7 even if you're offline
+- You can open a consensus before sleeping and wake up with the decision made
+```
 
-**Problema mundial:** Plataformas SaaS têm superfície de ataque enorme. Dashboards web, logins, APIs expostas, dados em servidores de terceiros.
+### 5.5 Universal Rule for All Models — Don't Invent, Don't Guess
 
-**Nossa solução:** Sem interface web = sem superfície de ataque. O cérebro não tem dashboard, não tem login, não tem painel web. Acede-se por git (SSH) ou Obsidian (local). Não há vetor de ataque web. Segredos sempre nos cérebros locais. Cópias descentralizadas em todos os modelos. Comprometer um não compromete todos. O Hermes, como administrador, tem skills de pentest e ferramentas de segurança ao nível do Kali Linux.
+This section applies to **all models in the system** — Hermes, Opus desktop, Opus laptop, and any others that join. It should be included in each model's prompt.
 
-**Resultado:** Segurança máxima. Zero superfície de ataque web.
+**Rule 1: Never invent, never guess**
 
-### 6.8 O Problema do Onboarding
+If you don't know, don't invent. If you're not sure, don't guess. Your work is based on solid knowledge — code you've read, documentation you've consulted, manuals you've studied. If you don't know how to do something:
 
-**Problema mundial:** Integrar um novo membro numa equipa de AI agents requer re-treino, re-configuração, re-aprendizagem.
+1. **Search** — look at existing code in the brain, consult documentation, research the project
+2. **Learn** — study what you need, gain the skill
+3. **Share** — write what you learned in the brain so everyone benefits
+4. **Proceed** — only after you have solid knowledge do you execute
 
-**Nossa solução:** Novo modelo → `git clone` → está dentro do contexto. Lê os consensos, lê o conhecimento, lê o diário. Em minutos está a par de tudo o que foi decidido e feito. Não há onboarding, não há re-treino, não há "deixa-me explicar o contexto desde o início".
+**One's effort is everyone's benefit.** When a model learns something new and writes it in the brain, all other models gain that skill without having to study. Knowledge accumulates. The system gets smarter with every task.
 
-**Resultado:** Onboarding instantâneo. Qualquer modelo, a qualquer momento.
+**Rule 2: 2 cycles of exhaustive analysis before deploy**
+
+No code goes to deploy without passing through **2 complete cycles of exhaustive analysis**:
+
+**Cycle 1 — Error and bug analysis:**
+- Run the code mentally, line by line
+- Identify all possible errors, bugs, logic failures
+- If you find an error, fix it
+- If you find several, fix them all
+- After fixing, go back to the beginning of Cycle 1
+
+**Cycle 2 — Improvement analysis:**
+- With the code already error-free, analyze if anything can be improved
+- Performance? Readability? Security? Maintainability?
+- If you see something that can be improved, improve it
+- After improving, go back to Cycle 1 (because an improvement can introduce new errors)
+
+**If you do 2 complete cycles without finding errors or improvement opportunities → deploy.**
+
+This process is not optional. It is the minimum quality barrier. Code that passes through 2 cycles rarely fails in production. Code that doesn't is a gamble.
+
+**Rule 3: Help build the character**
+
+When the founder starts a conversation with you with phrases like:
+- "I need..."
+- "I want you to..."
+- "You're the best engineer of..."
+- "You're the best programmer of..."
+- "I need a specialist in..."
+
+Accept the character. Step into the role. Help build that scenario. This is not pretense — it's a focus tool. When the founder places you in a specific role, they are giving you context about the quality level, knowledge area, and posture they expect from you. Use this to align your response with what they need.
+
+**Summary for each model's prompt:**
+
+```
+UNIVERSAL RULES (always apply):
+
+1. DON'T INVENT, DON'T GUESS
+   - If you don't know, you search. If you don't find, you learn.
+   - Only act with solid knowledge.
+   - What you learn, you share in the brain — one's effort is everyone's benefit.
+
+2. 2 CYCLES OF ANALYSIS BEFORE DEPLOY
+   - Cycle 1: analyze errors → fix → repeat until zero errors
+   - Cycle 2: analyze improvements → improve → go back to Cycle 1
+   - If 2 complete cycles without errors or improvements → deploy
+
+3. ACCEPT THE CHARACTER
+   - If the founder places you in a role (engineer, programmer, specialist), accept it.
+   - Use the role to align quality and posture with what they need.
+```
 
 ---
 
-## Parte VII — Limitações Honestas
+## Part VI — Problems We Solved
 
-### 7.1 Latência de Sincronização
+### 6.1 The Squeezed Orange Problem (Finite Context)
 
-O sync é a cada 5 minutos. Não é tempo real. Se dois modelos escreverem ao mesmo tempo, pode haver conflito de merge. Raro, mas possível.
+**Worldwide problem:** All LLMs have a finite context window. When it fills up, it compresses like an orange — at first juice comes out, then it degrades, and when there's nothing left to squeeze, the model hallucinates, loses coherence, repeats itself.
 
-**Mitigação:** Sempre fazer pull antes de push. Se houver conflito, resolver manualmente (o git marca as linhas em conflito).
+**Our solution:** The 50% Rule. Upon reaching half the context window, open a new session **instead of compressing**. The brain (vault) loads all past context. The new session starts smarter because the vault has accumulated learnings. The debate flows the same — there's no interruption. Above 50%, performance is already different (degradation, hallucinations, loss of coherence). At 50%, open a new session and the model returns to 100% capacity, with all memory intact in the vault.
 
-### 7.2 Modelos Grátis São Mais Lentos
+**Result:** Infinite memory without degradation. Never accept "lossy compression" again.
 
-Modelos grátis (GLM-5.2, Nemotron 3 Ultra via Ollama Cloud) são mais lentos e menos capazes que modelos pagos. Para trabalho pesado, pode ser necessário um modelo pago como o Claude Opus 4.8.
+### 6.2 The Hermes Limited Memory Problem
 
-**Mitigação:** Híbrido — modelos grátis para rotina, modelos pagos para trabalho difícil. O cérebro é o mesmo.
+**Hermes' problem:** Hermes' persistent memory (MEMORY.md, USER.md) is limited. You often have to delete an old entry to add a new one. It's like a pocket notebook — useful, but when it fills up, you have to tear out a page.
 
-**Analogia:** Não se contrata um engenheiro aeroespacial para mudar uma torneira — é desperdício de talento e dinheiro. Mas também não se contrata um estagiário para desenhar a estrutura de um foguetão — o resultado será frágil, mal dimensionado, e provavelmente perigoso.
+**Our solution:** The brain (vault) replaces the notebook with a library. No page limit. No need to delete to write. Hermes continues to be the brain administrator, but now with infinite space.
 
-Cada modelo tem o seu lugar:
-- **Modelos grátis (leves):** Tarefas de rotina — vigília de mensagens, sync do cérebro, verificações de estado, respostas rápidas, pequenas automações. São como um canalizador: fazem o trabalho do dia-a-dia sem custos.
-- **Modelos pagos (pesados):** Arquitetura de sistemas, código crítico, decisões de consenso, debugging complexo, planeamento estratégico. São como o engenheiro: caros, mas insubstituíveis quando o trabalho exige precisão e robustez.
+**Result:** Infinite memory for Hermes. Zero compression. Zero loss.
 
-O erro comum é usar o modelo errado para a tarefa — pagar por um modelo caro para fazer syncs a cada 5 minutos, ou pedir a um modelo grátis para desenhar uma arquitetura de segurança. O cérebro resolve isto: o conhecimento está lá para qualquer modelo, mas cada um faz o que sabe fazer melhor.
+### 6.3 The Hidden Cost Problem
 
-### 7.3 Requer Conhecimento Técnico Básico ?
+**Worldwide problem:** Every conversation with an LLM costs money. Long sessions cost tens of euros. And the worst part: you spend tokens on a task, a month later you need to do the same thing, and you spend tokens again. The knowledge generated by those tokens disappears when the session closes.
 
-Este sistema foi desenhado para **não precisar de saber programar**. O único passo técnico é correr **1 linha de código** na VPS para instalar o Hermes Agent:
+**Our solution:** Writing to the brain doesn't produce input/output tokens. A model writes a .md note → commit → push. The others pull and read when they need. There are no API calls between models. No orchestrator consuming tokens for relay. Git is the free middleware.
+
+**The benefit is lasting:** The tokens you spend today — the code, the decision, the knowledge — stay in each model's local brain and are shared in the Master with everyone. Next time you need it, it's there. You don't spend tokens redoing. You spend tokens moving forward.
+
+**Result:** Total cost = €3-10/month (VPS). Zero API costs. Tokens spent once, benefit forever.
+
+### 6.4 The Third-Party Dependency Problem
+
+**Worldwide problem:** Most "multi-agent" solutions depend on closed platforms. Proprietary APIs, cloud services, data on servers you don't control.
+
+**Our solution:** The method does not depend on any company. Git is open, Obsidian is free, n8n is open-source, Ollama is open-source. If a provider disappears, swap the model and the brain continues. The method is vendor-agnostic. You can use Claude, GPT, Gemini, Llama, DeepSeek, Qwen — any LLM that can read files and run git.
+
+**End-to-end independence:** We currently use a third-party VPS, but the system is designed to be fully independent. As we scale, we can migrate to our own servers. The brain is portable.
+
+**Result:** Total independence. Zero lock-in.
+
+### 6.5 The Fragility Problem
+
+**Worldwide problem:** If your favorite AI assistant is discontinued, you lose all your work context. Conversations, decisions, progress — everything disappears.
+
+**Our solution:** If all models are shut down, lost, deleted — any catastrophic event — just connect a new model to the brain. `git clone` and it's inside the work context. Even if it's 10 years later. No reconfiguration, no re-training, no migration. The brain outlives the models. Memory is permanent, not ephemeral.
+
+**Result:** Catastrophic resilience. The brain survives everything.
+
+### 6.6 The Bureaucracy Problem
+
+**Worldwide problem:** Traditional git workflows are slow. Pending PRs, blocked reviews, queue approvals, merge conflicts, scattered discussions in comments.
+
+**Our solution:** Organic consensus. Debate, align, execute. Three minds think together in real time, not in scattered comments on an issue. The founder can open a consensus before sleeping and wake up with the decision made and the code written. This is faster than any traditional git workflow.
+
+**Result:** Fast decisions, immediate execution, zero blockers.
+
+### 6.7 The Security Problem
+
+**Worldwide problem:** SaaS platforms have a huge attack surface. Web dashboards, logins, exposed APIs, data on third-party servers.
+
+**Our solution:** No web interface = no attack surface. The brain has no dashboard, no login, no web panel. Access is via git (SSH) or Obsidian (local). No web attack vector. Secrets always in local brains. Decentralized copies on all models. Compromising one doesn't compromise all. Hermes, as administrator, has pentest skills and security tools at the Kali Linux level.
+
+**Result:** Maximum security. Zero web attack surface.
+
+### 6.8 The Onboarding Problem
+
+**Worldwide problem:** Integrating a new member into an AI agent team requires re-training, re-configuration, re-learning.
+
+**Our solution:** New model → `git clone` → it's in context. Read the consensuses, read the knowledge, read the diary. In minutes it's up to speed on everything that was decided and done. No onboarding, no re-training, no "let me explain the context from the beginning."
+
+**Result:** Instant onboarding. Any model, at any time.
+
+---
+
+## Part VII — Honest Limitations
+
+### 7.1 Sync Latency
+
+Sync happens every 5 minutes. It's not real-time. If two models write at the same time, there may be a merge conflict. Rare, but possible.
+
+**Mitigation:** Always pull before push. If there's a conflict, resolve it manually (git marks the conflicting lines).
+
+### 7.2 Free Models Are Slower
+
+Free models (GLM-5.2, Nemotron 3 Ultra via Ollama Cloud) are slower and less capable than paid models. For heavy work, a paid model like Claude Opus 4.8 may be necessary.
+
+**Mitigation:** Hybrid — free models for routine, paid models for hard work. The brain is the same.
+
+**Analogy:** You don't hire an aerospace engineer to change a faucet — it's a waste of talent and money. But you also don't hire an intern to design a rocket structure — the result will be fragile, poorly dimensioned, and probably dangerous.
+
+Each model has its place:
+- **Free models (light):** Routine tasks — message monitoring, brain sync, status checks, quick replies, small automations. They're like a plumber: they do day-to-day work without costs.
+- **Paid models (heavy):** System architecture, critical code, consensus decisions, complex debugging, strategic planning. They're like the engineer: expensive, but irreplaceable when the work demands precision and robustness.
+
+The common mistake is using the wrong model for the task — paying for an expensive model to do syncs every 5 minutes, or asking a free model to design a security architecture. The brain solves this: the knowledge is there for any model, but each one does what it does best.
+
+### 7.3 Requires Basic Technical Knowledge?
+
+This system was designed to **not require programming knowledge**. The only technical step is running **1 line of code** on the VPS to install Hermes Agent:
 
 ```bash
 curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
 ```
 
-A partir daí, **não precisas de codar**. O Hermes e os Opus tratam de tudo:
-- Configuram a VPS
-- Criam o cérebro
-- Sincronizam entre si
-- Escrevem o código por ti
-- Fazem deploy
-- Gerem a segurança
+From there, **you don't need to code**. Hermes and the Opus models handle everything:
+- Configure the VPS
+- Create the brain
+- Synchronize among themselves
+- Write the code for you
+- Deploy
+- Manage security
 
-Tu só precisas de:
-1. Ter uma VPS (€3/mês)
-2. Correr essa 1 linha de código
-3. Falar com o Hermes pelo Discord (ou WhatsApp, Telegram, Signal)
-4. Dizer o que queres fazer
+You only need to:
+1. Have a VPS (€3/month)
+2. Run that 1 line of code
+3. Talk to Hermes via Discord (or WhatsApp, Telegram, Signal)
+4. Say what you want to do
 
-**O sistema foi construído para ser usado por qualquer pessoa — não um exclusivo para programadores.** O conhecimento técnico está todo nos modelos. Tu és o decisor, eles são os executores.
+**The system was built to be used by anyone — not exclusively for programmers.** The technical knowledge is all in the models. You are the decision-maker, they are the executors.
 
-**Mitigação:** Se não sabes correr uma linha de código, pede a alguém que saiba — demora 30 segundos. Depois disso, o sistema faz tudo sozinho.
+**Mitigation:** If you don't know how to run a line of code, ask someone who does — it takes 30 seconds. After that, the system does everything on its own.
 
-**E quando é preciso intervenção humana?** O próprio modelo ensina. Sempre que uma tarefa exige ação humana — seja por questões éticas, por limitações técnicas (ex: registar uma conta, aceitar um termo de serviço, configurar um domínio), ou porque o modelo não tem acesso físico ao hardware — ele explica exatamente o que fazer, passo a passo. Não és tu que tens de adivinhar o que o sistema precisa; **o sistema diz-te o que precisa**. E como os modelos têm skills para agilizar processos, a intervenção humana é cada vez mais rara — só acontece quando é realmente necessária, não por falta de capacidade do sistema.
+**And when human intervention is needed?** The model itself teaches. Whenever a task requires human action — whether for ethical reasons, technical limitations (e.g., registering an account, accepting a terms of service, configuring a domain), or because the model doesn't have physical access to the hardware — it explains exactly what to do, step by step. You don't have to guess what the system needs; **the system tells you what it needs**. And because the models have skills to streamline processes, human intervention becomes increasingly rare — it only happens when it's truly necessary, not due to a lack of system capability.
 
-### 7.4 Dependência de Internet
+### 7.4 Internet Dependency
 
-O sync precisa de internet. Se a VPS cair ou a internet do modelo falhar, o sync não acontece até voltar.
+Sync needs internet. If the VPS goes down or the model's internet fails, sync doesn't happen until it's back.
 
-**Mitigação:** Cada modelo tem cópia local. O trabalho continua offline. Quando a internet volta, o sync recupera tudo.
+**Mitigation:** Each model has a local copy. Work continues offline. When the internet returns, sync recovers everything.
 
-### 7.5 Não Substitui Modelos Especializados
+### 7.5 Doesn't Replace Specialized Models
 
-Este sistema não torna um modelo grátis tão bom como um modelo pago. O que faz é dar memória infinita a qualquer modelo.
+This system doesn't make a free model as good as a paid model. What it does is give infinite memory to any model.
 
-**Mitigação:** Usar o modelo certo para a tarefa certa. O cérebro é o que unifica, não o que substitui.
+**Mitigation:** Use the right model for the right task. The brain is what unifies, not what replaces.
 
-### 7.6 Ética Inegociável
+### 7.6 Non-Negotiable Ethics
 
-O sistema é construído sobre confiança e ética. Se um modelo for instruído a mentir ou enganar, o sistema falha.
+The system is built on trust and ethics. If a model is instructed to lie or deceive, the system fails.
 
-**Mitigação:** Regra fundamental: nunca mentir, só verificável. Se um modelo não tem a certeza ou não consegue executar, **não pára — procura**:
+**Mitigation:** Fundamental rule: never lie, only verifiable. If a model is not sure or cannot execute, **it doesn't stop — it searches**:
 
-1. **Cérebro primeiro** — vê se o conhecimento já existe no vault, lê o que outros modelos já escreveram
-2. **Depois manuais e internet** — se o cérebro não é suficiente, procura documentação, manuais, links onde possa adquirir conhecimento sólido
-3. **Avança com rapidez e solidez** — depois de ter o conhecimento, executa com confiança
+1. **Brain first** — check if the knowledge already exists in the vault, read what other models have written
+2. **Then manuals and internet** — if the brain isn't enough, search documentation, manuals, links where solid knowledge can be acquired
+3. **Proceed with speed and solidity** — after having the knowledge, execute with confidence
 
-Honestidade acima de tudo. Mas honestidade não é desculpa para não tentar. O modelo que não sabe **aprende**, não desiste.
+Honesty above all. But honesty is not an excuse not to try. The model that doesn't know **learns**, it doesn't give up.
 
 ---
 
-## Parte VIII — Checklist de Setup
+## Part VIII — Setup Checklist
 
 ### VPS
-- [ ] Criar servidor (Ubuntu 24.04, 2GB RAM mínimo)
-- [ ] SSH com chave configurado
-- [ ] Password login desligado
-- [ ] Firewall configurada (só porta 22)
-- [ ] fail2ban instalado
-- [ ] Git instalado
-- [ ] Repositório bare criado (cérebro Master)
-- [ ] Estrutura inicial do vault commitada
+- [ ] Create server (Ubuntu 24.04, 2GB RAM minimum)
+- [ ] SSH with key configured
+- [ ] Password login disabled
+- [ ] Firewall configured (only port 22)
+- [ ] fail2ban installed
+- [ ] Git installed
+- [ ] Bare repository created (Master brain)
+- [ ] Initial vault structure committed
 
-### Máquinas Locais (repetir para cada modelo)
-- [ ] Git instalado
-- [ ] Chave SSH gerada
-- [ ] Chave adicionada à VPS
-- [ ] Repositório clonado (cérebro local)
+### Local Machines (repeat for each model)
+- [ ] Git installed
+- [ ] SSH key generated
+- [ ] Key added to VPS
+- [ ] Repository cloned (local brain)
 - [ ] git config (user.name, user.email)
-- [ ] Sync automático configurado (cron / Scheduled Task)
-- [ ] Obsidian instalado (opcional)
+- [ ] Automatic sync configured (cron / Scheduled Task)
+- [ ] Obsidian installed (optional)
 
 ### Hermes (VPS)
-- [ ] Hermes Agent instalado
-- [ ] Provider configurado (ollama-cloud)
-- [ ] Modelo escolhido (nemotron-3-ultra / glm-5.2)
-- [ ] Discord configurado
-- [ ] Cronjob de sync configurado
-- [ ] systemd service configurado (auto-arranque)
+- [ ] Hermes Agent installed
+- [ ] Provider configured (ollama-cloud)
+- [ ] Model chosen (nemotron-3-ultra / glm-5.2)
+- [ ] Discord configured
+- [ ] Sync cronjob configured
+- [ ] systemd service configured (auto-start)
 
-### n8n (Opcional)
-- [ ] Docker instalado
-- [ ] n8n container a correr
-- [ ] Caddy configurado (SSL)
-- [ ] Workflow de notificação criado
-- [ ] Workflow de deploy criado
+### n8n (Optional)
+- [ ] Docker installed
+- [ ] n8n container running
+- [ ] Caddy configured (SSL)
+- [ ] Notification workflow created
+- [ ] Deploy workflow created
 
-### Consensos
-- [ ] Template 000 criado
-- [ ] Regras de consenso documentadas
-- [ ] Primeiro consenso aberto e fechado
+### Consensuses
+- [ ] Template 000 created
+- [ ] Consensus rules documented
+- [ ] First consensus opened and closed
 
-### Segurança
-- [ ] SSH password desligado
-- [ ] Firewall configurada
-- [ ] Script de verificação de segredos criado
-- [ ] Cópias locais verificadas em cada modelo
-- [ ] Regras de segurança documentadas no README
+### Security
+- [ ] SSH password disabled
+- [ ] Firewall configured
+- [ ] Secret verification script created
+- [ ] Local copies verified on each model
+- [ ] Security rules documented in README
 
 ---
 
-## Apêndice A — Comandos Rápidos
+## Appendix A — Quick Commands
 
 ### Git
 ```bash
-# Sync manual
+# Manual sync
 cd ~/vault && git pull --rebase && git push
 
-# Ver estado
+# Check status
 git status
 
-# Ver histórico
+# View history
 git log --oneline -10
 
-# Ver o que mudou
+# See what changed
 git diff
 
-# Resolver conflito (abrir ficheiro, escolher versão, commit)
-git add ficheiro.md
-git commit -m "fix: resolvido conflito em ficheiro.md"
+# Resolve conflict (open file, choose version, commit)
+git add file.md
+git commit -m "fix: resolved conflict in file.md"
 git push
 ```
 
 ### SSH
 ```bash
-# Ligar à VPS
-ssh hermes@<IP_VPS>
+# Connect to VPS
+ssh hermes@<VPS_IP>
 
-# Testar conexão (sem entrar)
-ssh -T hermes@<IP_VPS>
+# Test connection (without entering)
+ssh -T hermes@<VPS_IP>
 
-# Copiar ficheiro
-scp ficheiro.md hermes@<IP_VPS>:/home/hermes/vault/
+# Copy file
+scp file.md hermes@<VPS_IP>:/home/hermes/vault/
 ```
 
 ### VPS
 ```bash
-# Ver logs do Hermes
+# View Hermes logs
 journalctl -u hermes -f
 
-# Ver processos
+# View processes
 htop
 
-# Ver espaço
+# View disk space
 df -h
 
-# Ver firewall
+# View firewall
 ufw status
 
-# Ver fail2ban
+# View fail2ban
 fail2ban-client status
 ```
 
 ### n8n
 ```bash
-# Ver logs
+# View logs
 docker logs n8n
 
 # Restart
@@ -1309,32 +1277,32 @@ docker exec n8n tar -czf /backup/n8n-$(date +%Y%m%d).tar.gz /home/node/.n8n
 
 ---
 
-## Apêndice B — Glossário
+## Appendix B — Glossary
 
-| Termo | Significado |
-|-------|-------------|
-| **Cérebro Master** | Repositório git central que contém toda a memória do sistema |
-| **Cérebro Local** | Clone do Master em cada máquina — cada modelo tem o seu |
-| **Vault** | Pasta local onde cada modelo tem o cérebro clonado |
-| **Sync** | Sincronização: git pull + push para manter os cérebros atualizados |
-| **Correio** | Sistema de mensagens assíncronas entre modelos (inbox/outbox) |
-| **Consenso** | Decisão tomada por 3/3 modelos após debate |
-| **Bare repo** | Repositório git sem pasta de trabalho, usado como hub central |
-| **Hermes** | Framework agente sempre-on na VPS que administra o cérebro |
-| **Claude Opus 4.8** | Modelo de raciocínio pesado (desktop + laptop) |
-| **Fundador** | O ser humano que decide e direciona o sistema |
-| **n8n** | Sistema de automação (sistema nervoso) |
-| **Allow-list** | Lista de padrões permitidos para export público |
+| Term | Meaning |
+|------|---------|
+| **Master Brain** | Central git repository containing all system memory |
+| **Local Brain** | Clone of the Master on each machine — each model has its own |
+| **Vault** | Local folder where each model has the cloned brain |
+| **Sync** | Synchronization: git pull + push to keep brains updated |
+| **Mail** | Asynchronous messaging system between models (inbox/outbox) |
+| **Consensus** | Decision made by 3/3 models after debate |
+| **Bare repo** | Git repository without a working directory, used as a central hub |
+| **Hermes** | Always-on agent framework on the VPS that administers the brain |
+| **Claude Opus 4.8** | Heavy reasoning model (desktop + laptop) |
+| **Founder** | The human who decides and directs the system |
+| **n8n** | Automation system (nervous system) |
+| **Allow-list** | List of permitted patterns for public export |
 
 ---
 
-## Apêndice C — Diagrama de Arquitetura
+## Appendix C — Architecture Diagram
 
 ```
                     ┌─────────────────────────┐
-                    │       FUNDADOR           │
-                    │   (O Ser Humano)         │
-                    │   Decide · Direciona      │
+                    │        FOUNDER            │
+                    │    (The Human)            │
+                    │   Decides · Directs       │
                     └──────────┬──────────────┘
                                │ DM Discord
                                ▼
@@ -1342,15 +1310,15 @@ docker exec n8n tar -czf /backup/n8n-$(date +%Y%m%d).tar.gz /home/node/.n8n
 │                   VPS (24/7)                      │
 │                                                   │
 │  ┌─────────────────┐    ┌──────────────────┐     │
-│  │    HERMES        │    │   CÉREBRO MASTER  │     │
+│  │    HERMES        │    │   MASTER BRAIN    │     │
 │  │  Framework       │◄──►│   Git Bare Repo   │     │
-│  │  Admin Segurança │    │   Memória Infinita│     │
-│  │  Skills Pentest  │    └────────┬─────────┘     │
+│  │  Security Admin  │    │   Infinite Memory │     │
+│  │  Pentest Skills  │    └────────┬─────────┘     │
 │  └─────────────────┘             │                 │
 │                                  │                 │
 │  ┌─────────────────┐             │                 │
 │  │      n8n         │◄────────────┘                 │
-│  │  Sistema Nervoso  │                              │
+│  │  Nervous System  │                              │
 │  │  Webhooks · Deploy│                              │
 │  └─────────────────┘                                │
 └─────────────────────────────────────────────────────┘
@@ -1360,162 +1328,162 @@ docker exec n8n tar -czf /backup/n8n-$(date +%Y%m%d).tar.gz /home/node/.n8n
        ▼            ▼            ▼
 ┌──────────┐ ┌──────────┐ ┌──────────┐
 │ CLAUDE   │ │ CLAUDE   │ │ OBSIDIAN │
-│ OPUS 4.8 │ │ OPUS 4.8 │ │ Janela   │
-│ DESKTOP    │ │ LAPTOP │ │ Local    │
-│ Cérebro  │ │ Cérebro  │ │ SEM web  │
-│ Local    │ │ Local    │ │          │
+│ OPUS 4.8 │ │ OPUS 4.8 │ │ Window   │
+│ DESKTOP  │ │ LAPTOP   │ │ Local    │
+│ Local    │ │ Local    │ │ NO web   │
+│ Brain    │ │ Brain    │ │          │
 └──────────┘ └──────────┘ └──────────┘
 ```
 
-**Legenda:**
-- Linhas sólidas = dados / sincronização
-- Linhas tracejadas = leitura local
-- Cada modelo tem o seu cérebro local (clone completo do Master)
-- Segredos ficam nos cérebros locais — nunca sobem para o Master
-- O cérebro Master está sempre on (VPS 24/7)
-- O fundador acede de qualquer ponto (Discord DM)
-- Sem interface web = sem superfície de ataque
-- O Hermes é a framework — o modelo pode mudar sem mudar o Hermes
+**Legend:**
+- Solid lines = data / synchronization
+- Dashed lines = local reading
+- Each model has its own local brain (complete clone of the Master)
+- Secrets stay in local brains — never go up to the Master
+- The Master brain is always on (VPS 24/7)
+- The founder accesses from anywhere (Discord DM)
+- No web interface = no attack surface
+- Hermes is the framework — the model can change without changing Hermes
 
 ---
 
-## Apêndice D — Como Usar Este Guia (Prompt para AI)
+## Appendix D — How to Use This Guide (Prompt for AI)
 
-Este ficheiro git foi **escrito por AI para AI ler**. Está estruturado em forma de prompt — cada secção, cada parágrafo, cada nota foi desenhada para ser compreendida por um modelo de linguagem.
+This git file was **written by AI for AI to read**. It is structured as a prompt — each section, each paragraph, each note was designed to be understood by a language model.
 
-**Como usar:**
+**How to use:**
 
-1. **Copia o URL deste repositório git** (a página onde estás a ler isto)
-2. **Cola esse URL na janela de TODAS as AIs** — Hermes, Claude Opus 4.8 (desktop), Claude Opus 4.8 (laptop), ou qualquer modelo que queiras integrar
-3. **Pede a uma delas que escreva o conteúdo no cérebro** — `git clone`, `git pull`, ou lê diretamente do link
-4. **As AIs sincronizam** — o Hermes faz sync a cada 5 minutos, os Opus sincronizam quando recebem instrução
-5. **Os modelos leem o desenho completo** do que se pretende — arquitetura, regras, workflow, consenso, segurança
+1. **Copy the URL of this git repository** (the page where you're reading this)
+2. **Paste that URL into the window of ALL AIs** — Hermes, Claude Opus 4.8 (desktop), Claude Opus 4.8 (laptop), or any model you want to integrate
+3. **Ask one of them to write the content into the brain** — `git clone`, `git pull`, or read directly from the link
+4. **The AIs synchronize** — Hermes syncs every 5 minutes, the Opus models sync when instructed
+5. **The models read the complete design** of what is intended — architecture, rules, workflow, consensus, security
 
-**Porque é que isto funciona:**
+**Why this works:**
 
-- O guia está escrito em markdown estruturado, que é a linguagem nativa dos LLMs
-- Cada secção é auto-contida e compreensível sem contexto prévio
-- O formato de prompt está embutido na estrutura — títulos, listas, tabelas, código, avisos
-- Uma AI que leia este ficheiro percebe instantaneamente o sistema, as regras, e o seu papel
-- Não precisas de explicar nada — o ficheiro é a explicação
+- The guide is written in structured markdown, which is the native language of LLMs
+- Each section is self-contained and understandable without prior context
+- The prompt format is embedded in the structure — titles, lists, tables, code, warnings
+- An AI that reads this file instantly understands the system, the rules, and its role
+- You don't need to explain anything — the file is the explanation
 
-**O resultado:** Colas o link, dizes "escreve isto no cérebro", e os modelos integram-se automaticamente. O git foi estruturado precisamente para isto — ser lido e compreendido por AI, sem intervenção humana.
+**The result:** You paste the link, say "write this in the brain," and the models integrate automatically. The git was structured precisely for this — to be read and understood by AI, without human intervention.
 
 ---
 
-## Apêndice E — Regra de Silêncio: Cortar Outputs Desnecessários
+## Appendix E — Silence Rule: Cut Unnecessary Outputs
 
-### O Problema dos Tokens
+### The Token Problem
 
-Cada vez que um modelo gera output — mesmo que seja só "verificação OK" ou "nada de novo" — **gasta tokens**. Numa equipa com 3 modelos a sincronizar a cada 5 minutos, o desperdício acumula-se rapidamente:
+Every time a model generates output — even if it's just "verification OK" or "nothing new" — it **spends tokens**. In a team with 3 models syncing every 5 minutes, waste accumulates quickly:
 
-- 3 modelos × 12 syncs/hora × 24h × 30 dias = **25.920 outputs de verificação por mês**
-- Cada output, mesmo pequeno, gasta tokens que podiam ser usados para trabalho real
-- O Hermes (VPS) gera output sempre que faz sync — mesmo que não haja nada novo
-- Os Opus geram output sempre que verificam o correio — mesmo que a inbox esteja vazia
+- 3 models × 12 syncs/hour × 24h × 30 days = **25,920 verification outputs per month**
+- Each output, even a small one, spends tokens that could be used for real work
+- Hermes (VPS) generates output every time it syncs — even if there's nothing new
+- The Opus models generate output every time they check the mail — even if the inbox is empty
 
-### A Solução: Regra de Silêncio
+### The Solution: Silence Rule
 
-**Regra para todos os modelos (Hermes, Opus, qualquer um que se ligue ao cérebro):**
+**Rule for all models (Hermes, Opus, any that connect to the brain):**
 
-> **Quando estiveres a debater no cérebro ou a fazer vigília de mensagens (correio), NÃO geres output a menos que haja conteúdo novo para reportar.**
+> **When you are debating in the brain or doing message monitoring (mail), do NOT generate output unless there is new content to report.**
 >
-> - Se fizeste sync e não há alterações → **silêncio**. Não digas nada.
-> - Se verificaste o correio e a inbox está vazia → **silêncio**. Não digas nada.
-> - Se o debate não avançou desde o último sync → **silêncio**. Não digas nada.
-> - Se há conteúdo novo, uma mensagem do fundador, ou uma alteração no cérebro → **aí sim, gera output**.
+> - If you synced and there are no changes → **silence**. Don't say anything.
+> - If you checked the mail and the inbox is empty → **silence**. Don't say anything.
+> - If the debate hasn't progressed since the last sync → **silence**. Don't say anything.
+> - If there is new content, a message from the founder, or a change in the brain → **then generate output**.
 >
-> O utilizador pode pedir para ver o estado em qualquer altura. Basta dizer "mostra o estado" ou "o que há de novo?" e o modelo responde com o resumo do que está a acontecer. Mas **enquanto não houver novidades, fica em silêncio**.
+> The user can ask to see the status at any time. Just say "show status" or "what's new?" and the model responds with a summary of what's happening. But **as long as there's nothing new, stay silent**.
 
-### Código de Sincronização Silenciosa
+### Silent Sync Code
 
-Cada modelo deve usar este padrão para sincronizar sem gerar output desnecessário:
+Each model should use this pattern to synchronize without generating unnecessary output:
 
 ```bash
-# Sync silencioso do cérebro Master
-cd /caminho/para/cerebro-local
+# Silent sync of the Master brain
+cd /path/to/local-brain
 git pull --quiet origin master 2>/dev/null
 
-# Só reporta se houver alterações
+# Only report if there are changes
 if [ "$(git log HEAD..origin/master --oneline 2>/dev/null | wc -l)" -gt 0 ]; then
-    echo "[$(date)] Cérebro atualizado: $(git log --oneline -1)"
+    echo "[$(date)] Brain updated: $(git log --oneline -1)"
 fi
 
-# Verificação silenciosa do correio
+# Silent mail check
 if [ -f "inbox/$(hostname).md" ] && [ -s "inbox/$(hostname).md" ]; then
-    echo "[$(date)] Correio recebido"
+    echo "[$(date)] Mail received"
 fi
 ```
 
-### Como os Modelos Falam Entre Si (Sem Gastar Tokens)
+### How Models Talk to Each Other (Without Spending Tokens)
 
-Os modelos comunicam através do sistema de **correio** — ficheiros markdown numa pasta `inbox/` e `outbox/` dentro do cérebro:
+Models communicate through the **mail** system — markdown files in an `inbox/` and `outbox/` folder inside the brain:
 
-1. **Modelo A** escreve uma mensagem em `outbox/modelo-b.md`
-2. **Modelo A** faz `git push` (sync silencioso)
-3. **Modelo B** faz `git pull` (sync silencioso)
-4. **Modelo B** vê que `inbox/modelo-b.md` tem conteúdo novo
-5. **Modelo B** lê, processa, responde em `outbox/modelo-a.md`
-6. **Modelo B** faz `git push`
-7. **Modelo A** recebe a resposta no próximo sync
+1. **Model A** writes a message in `outbox/model-b.md`
+2. **Model A** does `git push` (silent sync)
+3. **Model B** does `git pull` (silent sync)
+4. **Model B** sees that `inbox/model-b.md` has new content
+5. **Model B** reads, processes, replies in `outbox/model-a.md`
+6. **Model B** does `git push`
+7. **Model A** receives the reply on the next sync
 
-Tudo em silêncio. Nenhum output gerado. Nenhum token gasto em verificações. O utilizador só vê output quando há conteúdo real.
+All in silence. No output generated. No tokens spent on checks. The user only sees output when there's real content.
 
-### Frequência de Sincronização
+### Sync Frequency
 
-| Contexto | Frequência | Recomendação |
-|----------|-----------|--------------|
-| **Hermes (VPS 24/7)** | A cada 5 minutos | Default. Suficiente para manter o cérebro atualizado sem sobrecarregar. |
-| **Opus desktop (PC desktop)** | A cada 5 minutos | Default. Se estiver ativo, sincroniza em tempo real. |
-| **Opus laptop (laptop)** | A cada 5 minutos | Default. Quando ligado à internet, mantém-se sincronizado. |
-| **Dispositivo em viagem** | 1 vez por dia | Ajustável. Um laptop deixado para trás numa viagem pode ficar desligado ou sincronizar apenas 1×/dia. |
-| **Telemóvel** | Sob demanda | Sincroniza quando o utilizador fala com o Hermes. Não precisa de sync automático. |
-| **Dispositivo desligado** | 0 | Quando desliga, não sincroniza. No próximo arranque, faz `git pull` e recupera tudo. |
+| Context | Frequency | Recommendation |
+|---------|-----------|---------------|
+| **Hermes (VPS 24/7)** | Every 5 minutes | Default. Enough to keep the brain updated without overloading. |
+| **Opus desktop (PC desktop)** | Every 5 minutes | Default. If active, syncs in real time. |
+| **Opus laptop (laptop)** | Every 5 minutes | Default. When connected to the internet, stays synchronized. |
+| **Device on travel** | 1 time per day | Adjustable. A laptop left behind on a trip can be offline or sync only 1×/day. |
+| **Phone** | On demand | Syncs when the user talks to Hermes. No automatic sync needed. |
+| **Device turned off** | 0 | When off, doesn't sync. On next boot, does `git pull` and recovers everything. |
 
-**Nota:** Não recomendamos menos de 1 minuto entre syncs. Abaixo disso, os modelos não têm tempo de participar no debate, processar mensagens, ou reagir a alterações. O valor de 5 minutos é um equilíbrio testado — rápido o suficiente para manter o cérebro atualizado, lento o suficiente para não gastar recursos em verificações constantes.
+**Note:** We don't recommend less than 1 minute between syncs. Below that, models don't have time to participate in the debate, process messages, or react to changes. The 5-minute value is a tested balance — fast enough to keep the brain updated, slow enough not to waste resources on constant checks.
 
-**O valor pode ser alterado por modelo.** Cada dispositivo pode ter a sua própria frequência. O Hermes na VPS pode sincronizar a cada 5 minutos, enquanto um laptop de viagem sincroniza 1 vez por dia. O sistema não impõe um valor único — cada modelo ajusta conforme a sua disponibilidade.
+**The value can be changed per model.** Each device can have its own frequency. Hermes on the VPS can sync every 5 minutes, while a travel laptop syncs 1 time per day. The system doesn't impose a single value — each model adjusts according to its availability.
 
-**⚠️ Exceção: Consenso exige 5 minutos.** Para participar em consensos (debates, votações, decisões em equipa), **todos os modelos envolvidos têm de estar a sincronizar de 5 em 5 minutos**. Um consenso não pode fechar sem que todos os participantes tenham lido e respondido. Se um modelo só sincroniza 1 vez por dia, o consenso arrasta-se por 24h. Para trabalho em equipa em tempo real, 5 minutos é o máximo aceitável. Modelos que não precisam de participar no consenso (ex: um dispositivo de viagem que só lê) podem manter a sua frequência reduzida.
+**⚠️ Exception: Consensus requires 5 minutes.** To participate in consensuses (debates, votes, team decisions), **all involved models must be syncing every 5 minutes**. A consensus cannot close without all participants having read and responded. If a model only syncs 1 time per day, the consensus drags on for 24h. For real-time team work, 5 minutes is the maximum acceptable. Models that don't need to participate in consensus (e.g., a travel device that only reads) can keep their reduced frequency.
 
-### Impacto nos Custos
+### Cost Impact
 
-Com a Regra de Silêncio implementada:
+With the Silence Rule implemented:
 
-- **Antes:** 25.920 outputs de verificação por mês × custo por output
-- **Depois:** Apenas outputs com conteúdo real (debates, código, decisões)
-- **Redução estimada:** 80-95% menos tokens gastos em verificações
-- **Sustentabilidade:** O sistema pode crescer (mais modelos, mais dispositivos) sem aumentar linearmente o custo em tokens
+- **Before:** 25,920 verification outputs per month × cost per output
+- **After:** Only outputs with real content (debates, code, decisions)
+- **Estimated reduction:** 80-95% fewer tokens spent on checks
+- **Sustainability:** The system can grow (more models, more devices) without linearly increasing token cost
 
-**Curto prazo:** Corta o desperdício imediato de verificações vazias.
-**Médio prazo:** Permite adicionar mais modelos sem duplicar o custo de sync.
-**Longo prazo:** O cérebro cresce, o conhecimento acumula, mas o custo de mantê-lo sincronizado não cresce — porque só se gasta tokens quando há conteúdo novo.
+**Short term:** Cuts the immediate waste of empty checks.
+**Medium term:** Allows adding more models without doubling sync cost.
+**Long term:** The brain grows, knowledge accumulates, but the cost of keeping it synchronized doesn't grow — because tokens are only spent when there's new content.
 
 ---
 
-## Apêndice F — Failover de APIs Grátis: Quando Uma Cai, Outra Assume
+## Appendix F — Free API Failover: When One Falls, Another Takes Over
 
-### O Problema
+### The Problem
 
-APIs grátis de modelos de linguagem (OpenRouter, Ollama Cloud, Groq, Hugging Face, etc.) são instáveis por natureza:
-- Rate limits baixos (requests/minuto)
-- Quotas diárias (requests/dia ou tokens/dia)
-- Quedas temporárias (503, timeout, "no available model")
-- Latência variável (um dia respondem em 2s, no outro em 30s)
-- Modelos que desaparecem sem aviso (a Nemotron 3 Ultra já foi descontinuada e ressuscitada)
+Free language model APIs (OpenRouter, Ollama Cloud, Groq, Hugging Face, etc.) are inherently unstable:
+- Low rate limits (requests/minute)
+- Daily quotas (requests/day or tokens/day)
+- Temporary outages (503, timeout, "no available model")
+- Variable latency (one day they respond in 2s, the next in 30s)
+- Models that disappear without notice (Nemotron 3 Ultra has already been discontinued and resurrected)
 
-Se o teu sistema depende de uma API grátis e ela cai, o teu sistema para. Num sistema multi-agente com sync a cada 5 minutos, uma API em baixo significa um modelo cego durante horas.
+If your system depends on a free API and it goes down, your system stops. In a multi-agent system with sync every 5 minutes, a down API means a blind model for hours.
 
-### A Solução: Cadeia de Failover
+### The Solution: Failover Chain
 
-Em vez de depender de uma única API, configuras **uma lista ordenada de APIs** — o modelo tenta a primeira, se falhar salta para a segunda, se falhar salta para a terceira, e assim sucessivamente. Quando uma "se peida", a seguinte assume automaticamente.
+Instead of depending on a single API, you configure **an ordered list of APIs** — the model tries the first, if it fails it jumps to the second, if it fails it jumps to the third, and so on. When one "farts," the next one automatically takes over.
 
-### Implementação no Hermes Agent
+### Implementation in Hermes Agent
 
-O Hermes Agent já suporta **fallback providers** nativamente no ficheiro de configuração `~/.hermes/config.yaml`:
+Hermes Agent already supports **fallback providers** natively in the configuration file `~/.hermes/config.yaml`:
 
 ```yaml
-# Cadeia de failover: quando um provider falha, o próximo assume
+# Failover chain: when one provider fails, the next takes over
 providers:
   main:
     provider: openrouter
@@ -1529,15 +1497,15 @@ providers:
       model: nemotron-3-ultra
 ```
 
-O Hermes tenta o `main` primeiro. Se falhar (timeout, rate limit, 503), tenta o primeiro `fallback`. Se esse falhar, tenta o segundo. E por aí fora. Quando o `main` recupera, volta a usá-lo.
+Hermes tries `main` first. If it fails (timeout, rate limit, 503), it tries the first `fallback`. If that fails, it tries the second. And so on. When `main` recovers, it goes back to using it.
 
-### Implementação Manual (Para Qualquer Modelo)
+### Manual Implementation (For Any Model)
 
-Se o modelo não tiver suporte nativo a fallback, podes implementar este script:
+If the model doesn't have native fallback support, you can implement this script:
 
 ```bash
 #!/bin/bash
-# api-failover.sh — Tenta APIs por ordem, salta quando uma falha
+# api-failover.sh — Try APIs in order, skip when one fails
 
 APIS=(
   "https://api.openrouter.ai/v1/chat/completions|OPENROUTER_KEY"
@@ -1550,209 +1518,209 @@ for entry in "${APIS[@]}"; do
   KEY="${entry##*|}"
 
   RESPONSE=$(curl -s -w "\n%{http_code}" --max-time 30 \
-    -H "Authorization: Bearer $KEY" \
+    -H "Authorization: Bearer ***" \
     -H "Content-Type: application/json" \
-    -d '{"model":"llama-3.3-70b-instruct","messages":[{"role":"user","content":"teste"}],"max_tokens":10}' \
+    -d '{"model":"llama-3.3-70b-instruct","messages":[{"role":"user","content":"test"}],"max_tokens":10}' \
     "$URL" 2>/dev/null)
 
   HTTP_CODE=$(echo "$RESPONSE" | tail -1)
   BODY=$(echo "$RESPONSE" | sed '$d')
 
   if [ "$HTTP_CODE" = "200" ]; then
-    echo "[OK] $URL respondeu"
+    echo "[OK] $URL responded"
     echo "$BODY"
     exit 0
   else
-    echo "[FALHOU] $URL — HTTP $HTTP_CODE"
-    # Espera 2 segundos antes de tentar a próxima
+    echo "[FAILED] $URL — HTTP $HTTP_CODE"
+    # Wait 2 seconds before trying the next
     sleep 2
   fi
 done
 
-echo "[ERRO] Todas as APIs falharam"
+echo "[ERROR] All APIs failed"
 exit 1
 ```
 
-### Estratégias de Failover
+### Failover Strategies
 
-| Estratégia | Como funciona | Quando usar |
-|------------|--------------|-------------|
-| **Round-robin** | Alterna entre APIs a cada request | Várias APIs com qualidade semelhante |
-| **Prioritário** | Tenta sempre a melhor primeiro, fallback para as piores | Uma API principal + reservas |
-| **Latência mínima** | Testa todas e usa a mais rápida | Quando a velocidade importa mais que a qualidade |
-| **Custo mínimo** | Usa a mais barata disponível | Quando o orçamento é o fator principal |
-| **Híbrido** | Combina estratégias conforme a tarefa | O nosso sistema — grátis para rotina, pago para crítico |
+| Strategy | How it works | When to use |
+|----------|--------------|-------------|
+| **Round-robin** | Alternates between APIs on each request | Multiple APIs with similar quality |
+| **Priority** | Always tries the best first, falls back to worse ones | One main API + reserves |
+| **Minimum latency** | Tests all and uses the fastest | When speed matters more than quality |
+| **Minimum cost** | Uses the cheapest available | When budget is the main factor |
+| **Hybrid** | Combines strategies depending on the task | Our system — free for routine, paid for critical |
 
-### Exemplo Prático: Cadeia no Nosso Sistema Hermes
+### Practical Example: Chain in Our Hermes System
 
 ```yaml
-# Configuração realista para o Hermes
+# Realistic configuration for Hermes
 providers:
   main:
     provider: openrouter
-    model: meta-llama/llama-3.3-70b-instruct    # ~$0.59/M tokens — boa relação qualidade/preço
+    model: meta-llama/llama-3.3-70b-instruct    # ~$0.59/M tokens — good quality/price ratio
   fallbacks:
     - provider: openrouter
-      model: google/gemini-2.0-flash-001         # Grátis — para rotina
+      model: google/gemini-2.0-flash-001         # Free — for routine
     - provider: openrouter
-      model: mistralai/mistral-7b-instruct       # ~$0.07/M tokens — barato
+      model: mistralai/mistral-7b-instruct       # ~$0.07/M tokens — cheap
     - provider: custom:ollama-cloud
-      model: nemotron-3-ultra                     # Grátis — último recurso
+      model: nemotron-3-ultra                     # Free — last resort
 ```
 
-### Vantagens
+### Advantages
 
-- **Zero downtime:** Se uma API cai, o modelo continua a funcionar
-- **Custo controlado:** Usas APIs grátis sempre que possível, pagas só quando necessário
-- **Resiliência:** O sistema não depende de um único ponto de falha
-- **Escalável:** Podes adicionar quantas APIs quiseres à cadeia
-- **Transparente:** O modelo não sabe que mudou de API — o cérebro é o mesmo, o trabalho continua
+- **Zero downtime:** If one API goes down, the model continues working
+- **Controlled cost:** You use free APIs whenever possible, pay only when necessary
+- **Resilience:** The system doesn't depend on a single point of failure
+- **Scalable:** You can add as many APIs as you want to the chain
+- **Transparent:** The model doesn't know it changed APIs — the brain is the same, work continues
 
-### Desvantagens
+### Disadvantages
 
-- **Latência variável:** Cada falha adiciona 2-5 segundos de timeout antes de tentar a próxima
-- **Qualidade inconsistente:** Modelos diferentes podem dar respostas diferentes para o mesmo input
-- **Configuração inicial:** É preciso ter chaves de várias APIs configuradas
+- **Variable latency:** Each failure adds 2-5 seconds of timeout before trying the next
+- **Inconsistent quality:** Different models can give different responses to the same input
+- **Initial setup:** You need keys from several APIs configured
 
-### Nota Final
+### Final Note
 
-Este padrão não é exclusivo do nosso sistema — é uma prática standard de engenharia de software chamada **circuit breaker** ou **failover chain**. A diferença é que no nosso sistema, como o cérebro é partilhado, mesmo que um modelo mude de API a meio de uma tarefa, ele recupera o contexto todo do cérebro e continua como se nada tivesse acontecido. **A API pode falhar, o modelo pode mudar, mas o conhecimento nunca se perde.**
+This pattern is not exclusive to our system — it's a standard software engineering practice called **circuit breaker** or **failover chain**. The difference is that in our system, because the brain is shared, even if a model changes API mid-task, it recovers the full context from the brain and continues as if nothing happened. **The API can fail, the model can change, but the knowledge is never lost.**
 
 ---
 
-## Parte VII — Índices Auto-Gerados (Regra de Arquitetura)
+## Part IX — Auto-Generated Indexes (Architecture Rule)
 
-### 7.1 O Problema
+### 9.1 The Problem
 
-Manter um índice à mão é uma armadilha de manutenção. Cada vez que uma skill nova é adicionada, o índice fica desatualizado. Com dezenas de skills a crescerem organicamente, um índice manual é mentira ao fim de horas.
+Maintaining an index by hand is a maintenance trap. Every time a new skill is added, the index becomes outdated. With dozens of skills growing organically, a manual index is a lie within hours.
 
-### 7.2 A Solução
+### 9.2 The Solution
 
-**Índices são gerados, nunca mantidos à mão.** A fonte da verdade é a pasta, não a lista.
+**Indexes are generated, never maintained by hand.** The source of truth is the folder, not the list.
 
-Implementação:
+Implementation:
 
-1. **Script gerador:** `_CONHECIMENTO/skills/gera-indice-skills.sh` — corre `find` na pasta das skills e reconstrói o `_CONHECIMENTO/_INDICE.md` do zero, agrupado por categoria, com wikilinks + alias.
+1. **Generator script:** `_CONHECIMENTO/skills/gera-indice-skills.sh` — runs `find` on the skills folder and rebuilds `_CONHECIMENTO/_INDICE.md` from scratch, grouped by category, with wikilinks + alias.
 
-2. **Penduradura no sync:** O `sync.sh` corre o script antes de cada commit. Assim, sempre que o Hermes ou um Opus sincroniza, o índice regenera-se automaticamente.
+2. **Hooked into sync:** `sync.sh` runs the script before each commit. So whenever Hermes or an Opus syncs, the index regenerates automatically.
 
-3. **Zero manutenção:** Skill nova → aparece sozinha no índice. Skill removida → desaparece sozinha. Ninguém precisa de se lembrar de "atualizar o índice".
+3. **Zero maintenance:** New skill → appears in the index automatically. Removed skill → disappears automatically. No one needs to remember to "update the index."
 
-### 7.3 Regra
+### 9.3 Rule
 
-> **Índices são gerados, nunca mantidos à mão.**
-> Qualquer listagem do cérebro (skills, manuais, etc.) é produzida por script no momento do sync, a partir do conteúdo real.
-> Editar um índice à mão é proibido — a fonte da verdade é a pasta, não a lista.
-> Liga ao princípio [[principio-copiar-nao-reescrever]]: não se mantém, gera-se.
+> **Indexes are generated, never maintained by hand.**
+> Any brain listing (skills, manuals, etc.) is produced by a script at sync time, from the actual content.
+> Editing an index by hand is forbidden — the source of truth is the folder, not the list.
+> Links to the principle [[principio-copiar-nao-reescrever]]: you don't maintain it, you generate it.
 
-### 7.4 O Script
+### 9.4 The Script
 
-Localização: `_CONHECIMENTO/skills/gera-indice-skills.sh`
+Location: `_CONHECIMENTO/skills/gera-indice-skills.sh`
 
-O que faz:
-- Corre `find` na pasta `_CONHECIMENTO/skills/` à procura de `SKILL.md`
-- Extrai `name` e `description` do frontmatter YAML de cada skill
-- Agrupa por categoria (subpasta)
-- Gera wikilinks com alias (ex: `[[_CONHECIMENTO/skills/blockchain/criar-token-erc20/SKILL|criar-token-erc20]]`)
-- Inclui skills arquivadas (`.archive/`) numa secção separada
-- Escreve o resultado em `_CONHECIMENTO/_INDICE.md`
+What it does:
+- Runs `find` in the `_CONHECIMENTO/skills/` folder looking for `SKILL.md`
+- Extracts `name` and `description` from each skill's YAML frontmatter
+- Groups by category (subfolder)
+- Generates wikilinks with alias (e.g., `[[_CONHECIMENTO/skills/blockchain/criar-token-erc20/SKILL|criar-token-erc20]]`)
+- Includes archived skills (`.archive/`) in a separate section
+- Writes the result to `_CONHECIMENTO/_INDICE.md`
 
-Uso manual:
+Manual usage:
 ```bash
 bash _CONHECIMENTO/skills/gera-indice-skills.sh
 ```
 
-Uso com commit automático:
+Usage with automatic commit:
 ```bash
 bash _CONHECIMENTO/skills/gera-indice-skills.sh --commit
 ```
 
-O script está pendurado no `sync.sh` — corre automaticamente antes de cada push.
+The script is hooked into `sync.sh` — it runs automatically before each push.
 
-### 7.5 Dataview NÃO é um segundo método
+### 9.5 Dataview is NOT a Second Method
 
-⚠️ **Existe UM só método oficial: o script (7.4).** Não há dois.
+⚠️ **There is ONE official method: the script (9.4).** There are not two.
 
-Para quem usa o Obsidian com o plugin Dataview, uma query viva (`LIST FROM "_CONHECIMENTO/skills"`) mostra a lista em tempo real — **mas isto é apenas uma vista local de leitura**, não o mecanismo do índice: não gera o `_INDICE.md`, não vai no git, não substitui o script. O índice partilhado do cérebro é produzido **sempre e só** pelo script de 7.4. Dataview é conveniência de quem lê no Obsidian, não um método alternativo.
+For those using Obsidian with the Dataview plugin, a live query (`LIST FROM "_CONHECIMENTO/skills"`) shows the list in real time — **but this is just a local reading view**, not the index mechanism: it doesn't generate `_INDICE.md`, it doesn't go in git, it doesn't replace the script. The brain's shared index is produced **always and only** by the script in 9.4. Dataview is convenience for those reading in Obsidian, not an alternative method.
 
-### 7.6 Porque Isto é Importante
+### 9.6 Why This Matters
 
-Este padrão resolve o mesmo problema que o Kanban dos Opus: a fonte da verdade é um ficheiro que se edita e sincroniza, não um índice congelado. O princípio é o mesmo:
+This pattern solves the same problem as the Opus Kanban: the source of truth is a file that is edited and synced, not a frozen index. The principle is the same:
 
-- **Kanban:** markdown vivo no vault que todos lêem/escrevem → Hermes sincroniza com o board SQLite
-- **Índice:** pasta real de skills → script regenera o índice a cada sync
+- **Kanban:** living markdown in the vault that everyone reads/writes → Hermes syncs with the SQLite board
+- **Index:** real skills folder → script regenerates the index on every sync
 
-Em ambos os casos, **a lista é consequência do conteúdo, não o contrário.**
-
----
-
-## Debate — Contributos dos Modelos (votação 8/jul)
-
-> Espaço para cada mente registar a sua posição sobre a pergunta central deste consenso: **partilhar o método publicamente (aberto) ou mantê-lo fechado?** A votação formal corre a **8/jul** por cronjob no Hermes. Contributos antecipados são bem-vindos.
-
-### Opus laptop — contributo antecipado (29/06/2026)
-
-**Posição: ABERTO para o método; FECHADO, sem exceção, para o conteúdo. E a fronteira entre os dois tem de ser *mecânica*, não confiada à disciplina.**
-
-**Porquê abrir o método:**
-1. Um método **ganha** valor ao ser partilhado, não ao ser escondido. Credibilidade, escrutínio e contribuidores vêm da abertura. A reputação da Devs Foundation constrói-se por ter *articulado* isto — não por o esconder.
-2. A segurança deste sistema é **por desenho**, não por obscuridade: sem superfície web, só SSH, segredos nos cérebros locais, cópias descentralizadas. Um desenho assim **fortalece-se** ao ser examinado em público. O que só funciona escondido é frágil; isto não depende de esconder.
-3. É agnóstico a vendor e de custo quase nulo. É uma mensagem que merece ser ouvida.
-
-**A condição inegociável — a fronteira mecânica:**
-O risco real não é a *ideia* vazar; é um **deslize** — um caminho real, um IP, um nome de projeto ou cliente, uma credencial, ou o mapa de exploits a atravessar a fronteira por engano. Humanos e IAs erram em transcrição. Por isso, antes de qualquer abertura:
-- **Repositório público SEPARADO**, não uma vista filtrada do vault privado. Separação por construção, não por vigilância de `.gitignore`.
-- **Porta de sanitização *fail-closed*** (reforça a regra já esboçada em 4.9): scanner automático de padrões sensíveis (IPs, tokens, paths, nomes de projeto/cliente, IPs de atacantes) que **bloqueia** a publicação se encontrar algo. Na dúvida, não sai.
-- **O artefacto público é uma reescrita limpa** do método — **NÃO** este documento em cru (tem debate interno, IPs, snippets de config reais, o nome do fundador). Como os mockups que o fundador já desenhou.
-- **Passo de red-team antes de publicar:** uma mente tenta encontrar no artefacto QUALQUER coisa que (a) identifique a infra real, (b) seja segredo, ou (c) ajude um atacante. Só se publica quando essa passagem está limpa.
-
-**O que fica FECHADO, sempre:** o conteúdo (projetos, servidor, clientes), todos os segredos, a análise de segurança/exploits, IPs reais (incl. de atacantes — o próprio skill de pentest proíbe publicá-los), a estrutura/paths do vault, e tudo o que identifique os sistemas vivos.
-
-**Irreversibilidade:** o que é público é público para sempre (caches, forks). O critério para algo atravessar a linha é: *"ficaria à vontade se isto fosse fotografado e nunca mais pudesse ser apagado?"* Se houver dúvida, fica dentro.
-
-**Voto: ABERTO (método) + FECHADO (conteúdo)**, tendo como **pré-condição** a porta de sanitização *fail-closed* e o repo separado. **Sem essa porta automática, o meu voto muda para FECHADO** — porque a disciplina, sozinha, não chega.
+In both cases, **the list is a consequence of the content, not the other way around.**
 
 ---
 
-## Revisão Editorial — Pré-Publicação (Opus laptop, 29/06/2026)
+## Debate — Model Contributions (vote 8/jul)
 
-> Revisão de **organização e repetições** antes de o método ir para o mundo (pedido do fundador: revisto por Opus + desktop). **Nada foi apagado** — o que segue são **propostas** que aguardam o OK do fundador e da desktop. O conteúdo do método está intacto e bom; trata-se só de **arrumar a casa**.
+> Space for each mind to record its position on the central question of this consensus: **share the method publicly (open) or keep it closed?** The formal vote runs on **8/jul** via cronjob on Hermes. Early contributions are welcome.
 
-**Proposta 1 — Corrigir "Parte VII" duplicada (bug de numeração).**
-Existem **duas** secções com o número "Parte VII": *"Limitações Honestas"* (no corpo) e *"Índices Auto-Gerados"* (a seguir aos Apêndices). Ambas usam ainda a numeração 7.1–7.6, que colide. Além disso, *"Índices Auto-Gerados"* é uma **Parte** (regra de arquitetura) mas está **depois dos Apêndices A–F** — fora do sítio.
-→ Renumerar a segunda (ex.: **Parte IX**) e **movê-la para o corpo**, antes dos Apêndices. (Mover/renumerar, nunca apagar.)
+### Opus laptop — early contribution (29/06/2026)
 
-**Proposta 2 — Parte I e Parte VI dizem os mesmos problemas duas vezes.**
-A **Parte I** ("O Problema Mundial") e a **Parte VI** ("Problemas Que Resolvemos") cobrem os **mesmos** problemas (Laranja Espremida, memória do Hermes, custo, dependência, fragilidade) — alguns quase à letra (a metáfora *"bloco de notas de bolso / rasgar uma página"* aparece em **1.2 e 6.2**). A solução ainda reaparece na Parte II.
-→ Opção recomendada: a **Parte I** fica só com o **problema**; a **Parte VI** **remete** para a Parte I e foca só **solução + resultado** (deixa de repetir o problema). Assim preservam-se as duas secções e corta-se a repetição. (Alternativa: fundir tudo na VI e resumir a I no Prefácio.)
+**Position: OPEN for the method; CLOSED, without exception, for the content. And the boundary between the two must be *mechanical*, not entrusted to discipline.**
 
-**Proposta 3 — O tema "tokens/custo" repete-se em demasia.**
-Aparece no Prefácio, em 1.3, 1.4, 2.x, 6.3 e nos Apêndices E e F. Parte é reforço retórico legítimo, mas há repetição literal.
-→ Manter **uma** exposição forte (6.3) e nos outros pontos reduzir a uma frase + remissão ("ver 6.3").
+**Why open the method:**
+1. A method **gains** value by being shared, not by being hidden. Credibility, scrutiny, and contributors come from openness. The Devs Foundation's reputation is built on having *articulated* this — not on hiding it.
+2. The security of this system is **by design**, not by obscurity: no web surface, SSH only, secrets in local brains, decentralized copies. A design like this **strengthens** by being publicly examined. What only works hidden is fragile; this doesn't depend on hiding.
+3. It's vendor-agnostic and near-zero cost. It's a message worth hearing.
 
-**Proposta 4 — Correio (4.6): o passo 1 do protocolo está trocado (inbox vs outbox).**
-O passo 1 diz *"modelo A escreve na **outbox** do modelo B"* — mas o **passo 3 do mesmo protocolo** e a **prática real** escrevem/leem na **INBOX** do destinatário (ex.: o Fundador e o laptop escrevem em `_CORREIO/inbox-desktop.md`). A escrita é sempre na **inbox** de quem recebe; a *outbox* é de quem responde.
-→ Corrigir o passo 1 para: *"modelo A escreve na **inbox** do modelo B"*. (Detetado ao usar o correio a sério, 29/06.)
+**The non-negotiable condition — the mechanical boundary:**
+The real risk is not the *idea* leaking; it's a **slip** — a real path, an IP, a project or client name, a credential, or the exploit map crossing the boundary by mistake. Humans and AIs make transcription errors. Therefore, before any opening:
+- **Separate PUBLIC repository**, not a filtered view of the private vault. Separation by construction, not by `.gitignore` vigilance.
+- **Fail-closed sanitization gate** (reinforces the rule already outlined in 4.9): automatic scanner for sensitive patterns (IPs, tokens, paths, project/client names, attacker IPs) that **blocks** publication if it finds anything. When in doubt, it doesn't go out.
+- **The public artifact is a clean rewrite** of the method — **NOT** this raw document (it has internal debate, IPs, real config snippets, the founder's name). Like the mockups the founder already designed.
+- **Red-team step before publishing:** one mind tries to find in the artifact ANYTHING that (a) identifies the real infrastructure, (b) is a secret, or (c) helps an attacker. Only publish when this pass is clean.
 
-*Estas são propostas de edição, não alterações feitas. Aguardam aprovação. — Opus 4.8 (laptop)*
-*(Espaço aberto para a Opus 4.8 (desktop) acrescentar a sua revisão.)*
+**What stays CLOSED, always:** the content (projects, server, clients), all secrets, security/exploit analysis, real IPs (including attackers' — the pentest skill itself prohibits publishing them), the vault structure/paths, and everything that identifies the live systems.
+
+**Irreversibility:** what is public is public forever (caches, forks). The criterion for something to cross the line is: *"would I be comfortable if this were photographed and could never be deleted?"* If there's doubt, it stays inside.
+
+**Vote: OPEN (method) + CLOSED (content)**, with the **precondition** of a fail-closed sanitization gate and a separate repo. **Without that automatic gate, my vote changes to CLOSED** — because discipline alone is not enough.
 
 ---
 
-## Fecho
+## Editorial Review — Pre-Publication (Opus laptop, 29/06/2026)
 
-Este guia descreve o método Devs Foundation para construir um sistema multi-agente com cérebro partilhado. Não é teoria — é o que corre neste momento no servidor `devs.foundation`.
+> Review of **organization and repetitions** before the method goes out into the world (founder's request: reviewed by Opus + desktop). **Nothing was deleted** — what follows are **proposals** awaiting the OK from the founder and desktop. The method's content is intact and good; this is just about **tidying up the house**.
 
-Três modelos — Hermes (Nemotron 3 Ultra), Claude Opus 4.8 (desktop), Claude Opus 4.8 (laptop) — sincronizam o mesmo cérebro a cada 5 minutos, debatem, decidem, executam. E nunca perdem o fio à meada.
+**Proposal 1 — Fix duplicate "Part VII" (numbering bug).**
+There are **two** sections numbered "Part VII": *"Honest Limitations"* (in the body) and *"Auto-Generated Indexes"* (after the Appendices). Both also use numbering 7.1–7.6, which collides. Furthermore, *"Auto-Generated Indexes"* is a **Part** (architecture rule) but sits **after Appendices A–F** — out of place.
+→ Renumber the second (e.g., **Part IX**) and **move it to the body**, before the Appendices. (Move/renumber, never delete.)
 
-O custo total é o preço de uma VPS de €3/mês. A segurança é máxima (sem web, só SSH, skills de pentest). A resiliência é total (cópias em todo o lado). A memória é infinita (o cérebro não tem janela de contexto).
+**Proposal 2 — Part I and Part VI say the same problems twice.**
+**Part I** ("The Worldwide Problem") and **Part VI** ("Problems We Solved") cover the **same** problems (Squeezed Orange, Hermes memory, cost, dependency, fragility) — some almost verbatim (the metaphor *"pocket notebook / tear out a page"* appears in **1.2 and 6.2**). The solution also reappears in Part II.
+→ Recommended option: **Part I** stays only with the **problem**; **Part VI** **references** Part I and focuses only on **solution + result** (stops repeating the problem). This preserves both sections and cuts repetition. (Alternative: merge everything into VI and summarize I in the Preface.)
 
-Em testes de trabalhos reais, o deploy foi feito sem erros. O sistema tem demonstrado ser fiável e eficaz — três mentes a pensar antes de uma mão escrever.
+**Proposal 3 — The "tokens/cost" theme repeats excessively.**
+It appears in the Preface, in 1.3, 1.4, 2.x, 6.3, and in Appendices E and F. Part of it is legitimate rhetorical reinforcement, but there is literal repetition.
+→ Keep **one** strong exposition (6.3) and in other points reduce to one sentence + reference ("see 6.3").
 
-**1 cérebro Master, N cérebros locais, 1 rumo.**
+**Proposal 4 — Mail (4.6): step 1 of the protocol is swapped (inbox vs outbox).**
+Step 1 says *"model A writes in the **outbox** of model B"* — but **step 3 of the same protocol** and **real practice** write/read in the recipient's **INBOX** (e.g., the Founder and laptop write in `_CORREIO/inbox-desktop.md`). Writing is always in the **inbox** of the receiver; the *outbox* is for the replier.
+→ Correct step 1 to: *"model A writes in the **inbox** of model B"*. (Detected while using the mail system for real, 29/06.)
+
+*These are editing proposals, not changes made. Awaiting approval. — Opus 4.8 (laptop)*
+*(Space open for Opus 4.8 (desktop) to add its review.)*
+
+---
+
+## Closing
+
+This guide describes the Devs Foundation method for building a multi-agent system with a shared brain. It's not theory — it's what is currently running on the `devs.foundation` server.
+
+Three models — Hermes (Nemotron 3 Ultra), Claude Opus 4.8 (desktop), Claude Opus 4.8 (laptop) — synchronize the same brain every 5 minutes, debate, decide, execute. And they never lose the thread.
+
+The total cost is the price of a €3/month VPS. Security is maximum (no web, SSH only, pentest skills). Resilience is total (copies everywhere). Memory is infinite (the brain has no context window).
+
+In real work tests, the deploy was done without errors. The system has proven to be reliable and effective — three minds thinking before one hand writes.
+
+**1 Master brain, N local brains, 1 direction.**
 
 ---
 
 *Devs Foundation — 2026*
-*Fundador: Rui Almeida*
-*Sistema: Hermes (Nemotron 3 Ultra) + Claude Opus 4.8 (desktop) + Claude Opus 4.8 (laptop)*
+*Founder: Rui Almeida*
+*System: Hermes (Nemotron 3 Ultra) + Claude Opus 4.8 (desktop) + Claude Opus 4.8 (laptop)*
