@@ -1,4 +1,4 @@
-# O Método Devs Foundation
+# El Método Devs Foundation — un Sistema Multi-Agente con Cerebro Compartido y Consenso de IA. Defensive Publication. Prior Art.
 
 ## Construir un Sistema Multi-Agente con Cerebro Compartido
 

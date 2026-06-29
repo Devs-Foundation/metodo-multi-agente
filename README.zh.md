@@ -1,4 +1,4 @@
-# O Método Devs Foundation
+# Devs Foundation 方法 — 具有共享大脑和 AI 共识的多智能体系统。防御性公开。在先技术。
 
 ## 构建共享大脑的多智能体系统
 

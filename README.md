@@ -1,4 +1,4 @@
-# The Devs Foundation Method
+# The Devs Foundation Method — a Multi-Agent System with a Shared Brain and AI Consensus. Defensive Publication. Prior Art.
 
 ## Building a Multi-Agent System with a Shared Brain
 

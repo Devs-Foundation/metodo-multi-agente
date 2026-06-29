@@ -1,4 +1,4 @@
-# O Método Devs Foundation
+# Die Devs Foundation Methode — ein Multi-Agenten-System mit gemeinsamem Gehirn und KI-Konsens. Defensive Publication. Prior Art.
 
 ## Ein Multi-Agenten-System mit gemeinsamem Gehirn aufbauen
 
