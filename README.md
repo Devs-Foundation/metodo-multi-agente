@@ -20,7 +20,7 @@ Um sistema onde múltiplos modelos de IA (de diferentes providers) partilham o m
 
 | Documento | Descrição |
 |-----------|-----------|
-| `METODO.md` | Guia completo — do zero ao sistema em produção |
+| `004.md` | Guia completo — do zero ao sistema em produção |
 
 ## Resumo
 
