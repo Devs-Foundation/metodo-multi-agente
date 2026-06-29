@@ -1,4 +1,4 @@
-# Die Devs Foundation Methode — ein Multi-Agenten-System mit gemeinsamem Gehirn und KI-Konsens. Defensive Publication. Prior Art.
+# Die Devs Foundation Methode — das weltweit erste Multi-Agenten-Konsenssystem mit gemeinsamem Gehirn. Defensive Publication. Prior Art.
 
 ## Ein Multi-Agenten-System mit gemeinsamem Gehirn aufbauen
 
