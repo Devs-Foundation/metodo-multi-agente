@@ -31,7 +31,7 @@ This document is published as a **defensive publication** to establish public **
 
 ---
 
-# 004 — O Método Devs Foundation
+# O Método Devs Foundation
 
 ## Construir um Sistema Multi-Agente com Cérebro Partilhado
 
@@ -648,9 +648,9 @@ O correio é o mecanismo de comunicação assíncrona entre modelos. Cada modelo
 ## Mensagens
 
 ### 2026-06-28 10:00 — De: Hermes
-**Assunto:** Proposta de consenso 004
+**Assunto:** Proposta de consenso
 
-Lê o ficheiro _CONSENSO/004-git-aberto-ou-fechado.md
+Lê o ficheiro _CONSENSO/git-aberto-ou-fechado.md
 Preciso da tua opinião sobre partilhar o método publicamente.
 
 ---
@@ -658,7 +658,7 @@ Preciso da tua opinião sobre partilhar o método publicamente.
 ### 2026-06-28 10:05 — De: laptop
 **Assunto:** Diagrama de arquitetura
 
-Fiz um diagrama mermaid para o 004. Está em _PROJETOS/diagrama.md.
+Fiz um diagrama mermaid para o documento. Está em _PROJETOS/diagrama.md.
 Diz-me se está correto.
 ```
 
@@ -718,7 +718,7 @@ O consenso é como os modelos tomam decisões em conjunto. Três modelos debatem
 5. O código é testado em produção
 6. O deploy é feito — e até agora, tudo o que fizemos deploy foi **sem erros**
 
-**Este guia (004) é a prova.** Foi o nosso consenso 004. Correu com sucesso. O método está documentado, testado, e em produção.
+**Este guia é a prova.** Foi o nosso consenso. Correu com sucesso. O método está documentado, testado, e em produção.
 
 **O n8n automatiza o que já existe. O consenso decide o que ainda não existe.** Um não substitui o outro — completam-se. O n8n trata dos workflows, notificações, deploys. O consenso trata das decisões, do debate, da qualidade. Juntos, são o sistema mais avançado que existe para trabalho multi-agente.
 
@@ -1703,7 +1703,7 @@ Em ambos os casos, **a lista é consequência do conteúdo, não o contrário.**
 O risco real não é a *ideia* vazar; é um **deslize** — um caminho real, um IP, um nome de projeto ou cliente, uma credencial, ou o mapa de exploits a atravessar a fronteira por engano. Humanos e IAs erram em transcrição. Por isso, antes de qualquer abertura:
 - **Repositório público SEPARADO**, não uma vista filtrada do vault privado. Separação por construção, não por vigilância de `.gitignore`.
 - **Porta de sanitização *fail-closed*** (reforça a regra já esboçada em 4.9): scanner automático de padrões sensíveis (IPs, tokens, paths, nomes de projeto/cliente, IPs de atacantes) que **bloqueia** a publicação se encontrar algo. Na dúvida, não sai.
-- **O artefacto público é uma reescrita limpa** do método — **NÃO** este 004 em cru (tem debate interno, IPs, snippets de config reais, o nome do fundador). Como os mockups que o fundador já desenhou.
+- **O artefacto público é uma reescrita limpa** do método — **NÃO** este documento em cru (tem debate interno, IPs, snippets de config reais, o nome do fundador). Como os mockups que o fundador já desenhou.
 - **Passo de red-team antes de publicar:** uma mente tenta encontrar no artefacto QUALQUER coisa que (a) identifique a infra real, (b) seja segredo, ou (c) ajude um atacante. Só se publica quando essa passagem está limpa.
 
 **O que fica FECHADO, sempre:** o conteúdo (projetos, servidor, clientes), todos os segredos, a análise de segurança/exploits, IPs reais (incl. de atacantes — o próprio skill de pentest proíbe publicá-los), a estrutura/paths do vault, e tudo o que identifique os sistemas vivos.
