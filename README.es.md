@@ -1,3 +1,5 @@
+**🌐 Languages:** [English](README.en.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [中文](README.zh.md)
+
 # El Método Devs Foundation — el primer Sistema de Consenso Multi-Agente del mundo con Cerebro Compartido. Defensive Publication. Prior Art.
 
 ## Construir un Sistema Multi-Agente con Cerebro Compartido

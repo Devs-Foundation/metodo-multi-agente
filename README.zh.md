@@ -1,3 +1,5 @@
+**🌐 Languages:** [English](README.en.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [中文](README.zh.md)
+
 # Devs Foundation 方法 — 世界上首个具有共享大脑的多智能体共识系统。防御性公开。在先技术。
 
 ## 构建共享大脑的多智能体系统

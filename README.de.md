@@ -1,3 +1,5 @@
+**🌐 Languages:** [English](README.en.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [中文](README.zh.md)
+
 # Die Devs Foundation Methode — das weltweit erste Multi-Agenten-Konsenssystem mit gemeinsamem Gehirn. Defensive Publication. Prior Art.
 
 ## Ein Multi-Agenten-System mit gemeinsamem Gehirn aufbauen
