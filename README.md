@@ -9,6 +9,13 @@
 
 <p align="center"><em>🧠 The Devs Foundation brain at 7 days — a self-linking, self-growing knowledge graph.</em></p>
 
+<p align="center">
+  <img src="mindmap-en.png" alt="🗺️ The Devs Foundation Method at a glance — the shared brain and its 8 pillars." width="820">
+</p>
+
+<p align="center"><em>🗺️ The Devs Foundation Method at a glance — the shared brain and its 8 pillars.</em></p>
+
+
 ---
 
 ## 🌐 Read in your language

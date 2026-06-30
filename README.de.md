@@ -38,6 +38,13 @@ Dieses Dokument wird als **Defensive Publication** veröffentlicht, um öffentli
 
 <p align="center"><em>🧠 Das Devs-Foundation-Gehirn nach 7 Tagen — ein selbstverknüpfender, selbstwachsender Wissensgraph.</em></p>
 
+<p align="center">
+  <img src="mindmap-de.png" alt="🗺️ Die Devs-Foundation-Methode auf einen Blick — das geteilte Gehirn und seine 8 Säulen." width="820">
+</p>
+
+<p align="center"><em>🗺️ Die Devs-Foundation-Methode auf einen Blick — das geteilte Gehirn und seine 8 Säulen.</em></p>
+
+
 
 ## Vorwort — Das Problem, das dieser Leitfaden löst
 

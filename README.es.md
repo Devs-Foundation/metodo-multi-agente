@@ -38,6 +38,13 @@ Este documento se publica como **defensive publication** para establecer **prior
 
 <p align="center"><em>🧠 El cerebro de Devs Foundation a los 7 días — un grafo de conocimiento que se enlaza y crece solo.</em></p>
 
+<p align="center">
+  <img src="mindmap-es.png" alt="🗺️ El Método Devs Foundation de un vistazo — el cerebro compartido y sus 8 pilares." width="820">
+</p>
+
+<p align="center"><em>🗺️ El Método Devs Foundation de un vistazo — el cerebro compartido y sus 8 pilares.</em></p>
+
+
 
 ## Prefacio — El Problema que Esta Guía Resuelve
 

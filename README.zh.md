@@ -38,6 +38,13 @@
 
 <p align="center"><em>🧠 Devs Foundation 的大脑 · 第7天 —— 一个自我连接、自我生长的知识图谱。</em></p>
 
+<p align="center">
+  <img src="mindmap-zh.png" alt="🗺️ Devs Foundation 方法一览 —— 共享大脑及其 8 大支柱。" width="820">
+</p>
+
+<p align="center"><em>🗺️ Devs Foundation 方法一览 —— 共享大脑及其 8 大支柱。</em></p>
+
+
 
 ## 前言 — 本指南解决的问题
 
