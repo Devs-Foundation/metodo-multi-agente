@@ -30,6 +30,13 @@ Este documento se publica como **defensive publication** para establecer **prior
 
 ---
 
+<p align="center">
+  <img src="grafo-7-dias.png" alt="🧠 El cerebro de Devs Foundation a los 7 días — un grafo de conocimiento que se enlaza y crece solo." width="680">
+</p>
+
+<p align="center"><em>🧠 El cerebro de Devs Foundation a los 7 días — un grafo de conocimiento que se enlaza y crece solo.</em></p>
+
+
 ## Prefacio — El Problema que Esta Guía Resuelve
 
 Los modelos de lenguaje (LLMs) tienen un problema fundamental: **no tienen memoria a largo plazo**.

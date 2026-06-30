@@ -30,6 +30,13 @@
 
 ---
 
+<p align="center">
+  <img src="grafo-7-dias.png" alt="🧠 Devs Foundation 的大脑 · 第7天 —— 一个自我连接、自我生长的知识图谱。" width="680">
+</p>
+
+<p align="center"><em>🧠 Devs Foundation 的大脑 · 第7天 —— 一个自我连接、自我生长的知识图谱。</em></p>
+
+
 ## 前言 — 本指南解决的问题
 
 语言模型（LLM）有一个根本性问题：**它们没有长期记忆**。

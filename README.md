@@ -30,6 +30,13 @@ This document is published as **defensive publication** to establish public **pr
 
 ---
 
+<p align="center">
+  <img src="grafo-7-dias.png" alt="🧠 The Devs Foundation brain at 7 days — a self-linking, self-growing knowledge graph." width="680">
+</p>
+
+<p align="center"><em>🧠 The Devs Foundation brain at 7 days — a self-linking, self-growing knowledge graph.</em></p>
+
+
 ## Preface — The Problem This Guide Solves
 
 Language models (LLMs) have a fundamental problem: **they have no long-term memory**.

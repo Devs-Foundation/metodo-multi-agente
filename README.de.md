@@ -30,6 +30,13 @@ Dieses Dokument wird als **Defensive Publication** veröffentlicht, um öffentli
 
 ---
 
+<p align="center">
+  <img src="grafo-7-dias.png" alt="🧠 Das Devs-Foundation-Gehirn nach 7 Tagen — ein selbstverknüpfender, selbstwachsender Wissensgraph." width="680">
+</p>
+
+<p align="center"><em>🧠 Das Devs-Foundation-Gehirn nach 7 Tagen — ein selbstverknüpfender, selbstwachsender Wissensgraph.</em></p>
+
+
 ## Vorwort — Das Problem, das dieser Leitfaden löst
 
 Sprachmodelle (LLMs) haben ein grundlegendes Problem: **Sie haben kein Langzeitgedächtnis.**
