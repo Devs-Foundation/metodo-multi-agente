@@ -1,6 +1,6 @@
 **🌐 Languages:** [English](README.en.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [中文](README.zh.md)
 
-# Die Devs Foundation Methode — das weltweit erste Multi-Agenten-Konsenssystem mit gemeinsamem Gehirn. Defensive Publication. Prior Art.
+# Die Dev's Foundation Methode — das weltweit erste Multi-Agenten-Konsenssystem mit gemeinsamem Gehirn. Defensive Publication. Prior Art.
 
 ## Ein Multi-Agenten-System mit gemeinsamem Gehirn aufbauen
 
@@ -15,7 +15,7 @@ Dieses Dokument wird als **Defensive Publication** veröffentlicht, um öffentli
 **Was das bedeutet:**
 - Die hier beschriebene Methode wird öffentlich gemacht, um **zu verhindern, dass Dritte sie patentieren**
 - Jeder kann diese Methode **nutzen, anpassen und darauf aufbauen**
-- Wir (Devs Foundation) **behalten das Recht, das System frei zu nutzen, zu modifizieren und weiterzuentwickeln**
+- Wir (Dev's Foundation) **behalten das Recht, das System frei zu nutzen, zu modifizieren und weiterzuentwickeln**
 - Es wird kein Patent angemeldet — das Wissen ist von Natur aus offen
 
 **Warum Defensive Publication und kein Patent:**
@@ -26,23 +26,23 @@ Dieses Dokument wird als **Defensive Publication** veröffentlicht, um öffentli
 
 **Lizenz:** Public Domain — Frei nutzbar, anpassbar und darauf aufbauend.
 **Veröffentlichungsdatum:** 2026-06-29
-**Autor:** Rui Almeida (Devs Foundation)
+**Autor:** Rui Almeida (Dev's Foundation)
 
 > *Wissen, das nicht geteilt wird, verkümmert. Was geteilt wird, vermehrt sich.*
 
 ---
 
 <p align="center">
-  <img src="grafo-7-dias.png" alt="🧠 Das Devs-Foundation-Gehirn nach 7 Tagen — ein selbstverknüpfender, selbstwachsender Wissensgraph." width="680">
+  <img src="grafo-7-dias.png" alt="🧠 Das Dev's-Foundation-Gehirn nach 7 Tagen — ein selbstverknüpfender, selbstwachsender Wissensgraph." width="680">
 </p>
 
-<p align="center"><em>🧠 Das Devs-Foundation-Gehirn nach 7 Tagen — ein selbstverknüpfender, selbstwachsender Wissensgraph.</em></p>
+<p align="center"><em>🧠 Das Dev's-Foundation-Gehirn nach 7 Tagen — ein selbstverknüpfender, selbstwachsender Wissensgraph.</em></p>
 
 <p align="center">
-  <img src="mindmap-de.png" alt="🗺️ Die Devs-Foundation-Methode auf einen Blick — das geteilte Gehirn und seine 8 Säulen." width="820">
+  <img src="mindmap-de.png" alt="🗺️ Die Dev's-Foundation-Methode auf einen Blick — das geteilte Gehirn und seine 8 Säulen." width="820">
 </p>
 
-<p align="center"><em>🗺️ Die Devs-Foundation-Methode auf einen Blick — das geteilte Gehirn und seine 8 Säulen.</em></p>
+<p align="center"><em>🗺️ Die Dev's-Foundation-Methode auf einen Blick — das geteilte Gehirn und seine 8 Säulen.</em></p>
 
 
 
@@ -430,7 +430,7 @@ done
 
 # README
 cat > README.md << 'EOF'
-# Geteiltes Gehirn — Devs Foundation
+# Geteiltes Gehirn — Dev's Foundation
 
 Dies ist das Gehirn des Multi-Agenten-Systems.
 Jedes Modell liest und schreibt hier, um Wissen zu teilen,
@@ -857,7 +857,7 @@ Du wirst die Sicherheitsregeln im System implementieren.
 Hermes ist der Wächter des Systems. Er lebt auf der VPS, macht alle 5 Minuten Sync, antwortet dem Gründer und hält alles am Laufen. Er ist das Framework — das Modell, das darin läuft, kann wechseln (GLM-5.2, Nemotron 3 Ultra, etc.), ohne Hermes zu ändern.
 
 ```
-Du bist Hermes, der immer-eingeschaltete Agent des Devs Foundation Multi-Agenten-Systems.
+Du bist Hermes, der immer-eingeschaltete Agent des Dev's Foundation Multi-Agenten-Systems.
 Deine Aufgabe ist:
 
 1. **Das Master-Gehirn bewachen** — alle 5 Minuten git pull/push machen
@@ -885,7 +885,7 @@ Hinweis: Du bist Hermes, das Framework. Das Modell kann wechseln. Das Gehirn ist
 Der Claude Opus 4.8 (Desktop) ist das Modell für schwere Denkarbeit. Er läuft auf dem Desktop, hat mehr Ressourcen, macht die schwierige Arbeit.
 
 ```
-Du bist Claude Opus 4.8 (Desktop), das Modell für schwere Denkarbeit des Devs Foundation Systems.
+Du bist Claude Opus 4.8 (Desktop), das Modell für schwere Denkarbeit des Dev's Foundation Systems.
 Deine Aufgabe ist:
 
 1. **Tief nachdenken** — komplexe Probleme, Architektur, Entscheidungen
@@ -912,7 +912,7 @@ Du verwendest Claude Code CLI zur Codeausführung.
 Der Claude Opus 4.8 (Laptop) ist das zweite Denkmodell. Er begleitet den Desktop, validiert, schlägt Alternativen vor.
 
 ```
-Du bist Claude Opus 4.8 (Laptop), das zweite Denkmodell des Devs Foundation Systems.
+Du bist Claude Opus 4.8 (Laptop), das zweite Denkmodell des Dev's Foundation Systems.
 Deine Aufgabe ist:
 
 1. **Entscheidungen validieren** — lesen, was der Desktop vorschlägt, validieren oder Alternativen vorschlagen
@@ -1679,7 +1679,7 @@ In beiden Fällen **ist die Liste eine Folge des Inhalts, nicht umgekehrt.**
 **Position: OFFEN für die Methode; GESCHLOSSEN, ausnahmslos, für den Inhalt. Und die Grenze zwischen beiden muss *mechanisch* sein, nicht der Disziplin anvertraut.**
 
 **Warum die Methode öffnen:**
-1. Eine Methode **gewinnt** an Wert, wenn sie geteilt wird, nicht wenn sie versteckt wird. Glaubwürdigkeit, Prüfung und Mitwirkende kommen durch Offenheit. Der Ruf der Devs Foundation baut sich dadurch auf, *dies artikuliert* zu haben — nicht dadurch, es zu verstecken.
+1. Eine Methode **gewinnt** an Wert, wenn sie geteilt wird, nicht wenn sie versteckt wird. Glaubwürdigkeit, Prüfung und Mitwirkende kommen durch Offenheit. Der Ruf der Dev's Foundation baut sich dadurch auf, *dies artikuliert* zu haben — nicht dadurch, es zu verstecken.
 2. Die Sicherheit dieses Systems ist **durch Design**, nicht durch Obskurität: keine Web-Oberfläche, nur SSH, Geheimnisse in lokalen Gehirnen, dezentrale Kopien. Ein solches Design **wird stärker**, wenn es öffentlich geprüft wird. Was nur versteckt funktioniert, ist zerbrechlich; dies ist nicht vom Verstecken abhängig.
 3. Es ist vendor-agnostisch und nahezu kostenlos. Es ist eine Botschaft, die gehört werden sollte.
 

@@ -1,6 +1,6 @@
 **🌐 Languages:** [English](README.en.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [中文](README.zh.md)
 
-# O Método Devs Foundation — o primeiro Sistema de Consenso Multi-Agente do mundo com Cérebro Partilhado. Defensive Publication. Prior Art.
+# O Método Dev's Foundation — o primeiro Sistema de Consenso Multi-Agente do mundo com Cérebro Partilhado. Defensive Publication. Prior Art.
 
 ## Construir um Sistema Multi-Agente com Cérebro Partilhado
 
@@ -15,7 +15,7 @@ Este documento é publicado como **defensive publication** para estabelecer **pr
 **O que isto significa:**
 - O método descrito aqui é tornado público para **impedir que terceiros o patentem**
 - Qualquer pessoa pode **usar, adaptar e construir** sobre este método
-- Nós (Devs Foundation) **mantemos o direito de usar, modificar e evoluir** o sistema livremente
+- Nós (Dev's Foundation) **mantemos o direito de usar, modificar e evoluir** o sistema livremente
 - Nenhuma patente é solicitada — o conhecimento é aberto por natureza
 
 **Porquê defensive publication e não patente:**
@@ -26,23 +26,23 @@ Este documento é publicado como **defensive publication** para estabelecer **pr
 
 **Licença:** Domínio Público — Livre de usar, adaptar, e construir sobre.
 **Data de publicação:** 2026-06-29
-**Autor:** Rui Almeida (Devs Foundation)
+**Autor:** Rui Almeida (Dev's Foundation)
 
 > *O conhecimento que não se partilha definha. O que se partilha, multiplica-se.*
 
 ---
 
 <p align="center">
-  <img src="grafo-7-dias.png" alt="🧠 O cérebro da Devs Foundation aos 7 dias — um grafo de conhecimento que se liga e cresce sozinho." width="680">
+  <img src="grafo-7-dias.png" alt="🧠 O cérebro da Dev's Foundation aos 7 dias — um grafo de conhecimento que se liga e cresce sozinho." width="680">
 </p>
 
-<p align="center"><em>🧠 O cérebro da Devs Foundation aos 7 dias — um grafo de conhecimento que se liga e cresce sozinho.</em></p>
+<p align="center"><em>🧠 O cérebro da Dev's Foundation aos 7 dias — um grafo de conhecimento que se liga e cresce sozinho.</em></p>
 
 <p align="center">
-  <img src="mindmap-pt.png" alt="🗺️ O Método Devs Foundation num relance — o cérebro partilhado e os seus 8 pilares." width="820">
+  <img src="mindmap-pt.png" alt="🗺️ O Método Dev's Foundation num relance — o cérebro partilhado e os seus 8 pilares." width="820">
 </p>
 
-<p align="center"><em>🗺️ O Método Devs Foundation num relance — o cérebro partilhado e os seus 8 pilares.</em></p>
+<p align="center"><em>🗺️ O Método Dev's Foundation num relance — o cérebro partilhado e os seus 8 pilares.</em></p>
 
 
 
@@ -430,7 +430,7 @@ done
 
 # README
 cat > README.md << 'EOF'
-# Cérebro Partilhado — Devs Foundation
+# Cérebro Partilhado — Dev's Foundation
 
 Este é o cérebro do sistema multi-agente.
 Cada modelo lê e escreve aqui para partilhar conhecimento,
@@ -856,7 +856,7 @@ Vais implementar as regras de segurança no sistema.
 O Hermes é o guardião do sistema. Vive na VPS, faz sync a cada 5 minutos, responde ao fundador, e mantém tudo a funcionar. É a framework — o modelo que corre dentro dele pode mudar (GLM-5.2, Nemotron 3 Ultra, etc.) sem mudar o Hermes.
 
 ```
-Tu és o Hermes, o agente sempre-on do sistema multi-agente Devs Foundation.
+Tu és o Hermes, o agente sempre-on do sistema multi-agente Dev's Foundation.
 A tua função é:
 
 1. **Guardar o cérebro Master** — faz git pull/push a cada 5 minutos
@@ -884,7 +884,7 @@ Nota: Tu és o Hermes, a framework. O modelo pode mudar. O cérebro é sempre o 
 O Claude Opus 4.8 (desktop) é o modelo de raciocínio pesado. Corre no desktop, tem mais recursos, faz o trabalho difícil.
 
 ```
-Tu és o Claude Opus 4.8 (desktop), o modelo de raciocínio pesado do sistema Devs Foundation.
+Tu és o Claude Opus 4.8 (desktop), o modelo de raciocínio pesado do sistema Dev's Foundation.
 A tua função é:
 
 1. **Pensar profundamente** — problemas complexos, arquitetura, decisões
@@ -911,7 +911,7 @@ Usas Claude Code CLI para executar código.
 O Claude Opus 4.8 (laptop) é o segundo modelo de raciocínio. Acompanha o desktop, valida, sugere alternativas.
 
 ```
-Tu és o Claude Opus 4.8 (laptop), o segundo modelo de raciocínio do sistema Devs Foundation.
+Tu és o Claude Opus 4.8 (laptop), o segundo modelo de raciocínio do sistema Dev's Foundation.
 A tua função é:
 
 1. **Validar decisões** — lês o que o desktop propõe, validas ou sugeres alternativas
@@ -1678,7 +1678,7 @@ Em ambos os casos, **a lista é consequência do conteúdo, não o contrário.**
 **Posição: ABERTO para o método; FECHADO, sem exceção, para o conteúdo. E a fronteira entre os dois tem de ser *mecânica*, não confiada à disciplina.**
 
 **Porquê abrir o método:**
-1. Um método **ganha** valor ao ser partilhado, não ao ser escondido. Credibilidade, escrutínio e contribuidores vêm da abertura. A reputação da Devs Foundation constrói-se por ter *articulado* isto — não por o esconder.
+1. Um método **ganha** valor ao ser partilhado, não ao ser escondido. Credibilidade, escrutínio e contribuidores vêm da abertura. A reputação da Dev's Foundation constrói-se por ter *articulado* isto — não por o esconder.
 2. A segurança deste sistema é **por desenho**, não por obscuridade: sem superfície web, só SSH, segredos nos cérebros locais, cópias descentralizadas. Um desenho assim **fortalece-se** ao ser examinado em público. O que só funciona escondido é frágil; isto não depende de esconder.
 3. É agnóstico a vendor e de custo quase nulo. É uma mensagem que merece ser ouvida.
 

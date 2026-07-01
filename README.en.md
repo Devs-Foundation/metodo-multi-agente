@@ -1,6 +1,6 @@
 **🌐 Languages:** [English](README.en.md) · [Português](README.pt.md) · [Deutsch](README.de.md) · [Español](README.es.md) · [Français](README.fr.md) · [中文](README.zh.md)
 
-# The Devs Foundation Method — the world's first Multi-Agent Consensus System with a Shared Brain. Defensive Publication. Prior Art.
+# The Dev's Foundation Method — the world's first Multi-Agent Consensus System with a Shared Brain. Defensive Publication. Prior Art.
 
 ## Building a Multi-Agent System with a Shared Brain and Consensus System.
 
@@ -15,7 +15,7 @@ This document is published as **defensive publication** to establish public **pr
 **What this means:**
 - The method described here is made public to **prevent third parties from patenting it**
 - Anyone can **use, adapt, and build upon** this method
-- We (Devs Foundation) **retain the right to freely use, modify, and evolve** the system
+- We (Dev's Foundation) **retain the right to freely use, modify, and evolve** the system
 - No patent is sought — the knowledge is open by nature
 
 **Why defensive publication and not a patent:**
@@ -26,23 +26,23 @@ This document is published as **defensive publication** to establish public **pr
 
 **License:** Public Domain — Free to use, adapt, and build upon.
 **Publication date:** 2026-06-29
-**Author:** Rui Almeida (Devs Foundation)
+**Author:** Rui Almeida (Dev's Foundation)
 
 > *Knowledge that is not shared withers. What is shared multiplies.*
 
 ---
 
 <p align="center">
-  <img src="grafo-7-dias.png" alt="🧠 The Devs Foundation brain at 7 days — a self-linking, self-growing knowledge graph." width="680">
+  <img src="grafo-7-dias.png" alt="🧠 The Dev's Foundation brain at 7 days — a self-linking, self-growing knowledge graph." width="680">
 </p>
 
-<p align="center"><em>🧠 The Devs Foundation brain at 7 days — a self-linking, self-growing knowledge graph.</em></p>
+<p align="center"><em>🧠 The Dev's Foundation brain at 7 days — a self-linking, self-growing knowledge graph.</em></p>
 
 <p align="center">
-  <img src="mindmap-en.png" alt="🗺️ The Devs Foundation Method at a glance — the shared brain and its 8 pillars." width="820">
+  <img src="mindmap-en.png" alt="🗺️ The Dev's Foundation Method at a glance — the shared brain and its 8 pillars." width="820">
 </p>
 
-<p align="center"><em>🗺️ The Devs Foundation Method at a glance — the shared brain and its 8 pillars.</em></p>
+<p align="center"><em>🗺️ The Dev's Foundation Method at a glance — the shared brain and its 8 pillars.</em></p>
 
 
 
@@ -430,7 +430,7 @@ done
 
 # README
 cat > README.md << 'EOF'
-# Shared Brain — Devs Foundation
+# Shared Brain — Dev's Foundation
 
 This is the brain of the multi-agent system.
 Each model reads and writes here to share knowledge,
@@ -857,7 +857,7 @@ You are going to implement the security rules in the system.
 Hermes is the guardian of the system. It lives on the VPS, syncs every 5 minutes, responds to the founder, and keeps everything running. It is the framework — the model running inside it can change (GLM-5.2, Nemotron 3 Ultra, etc.) without changing Hermes.
 
 ```
-You are Hermes, the always-on agent of the Devs Foundation multi-agent system.
+You are Hermes, the always-on agent of the Dev's Foundation multi-agent system.
 Your role is:
 
 1. **Guard the Master brain** — do git pull/push every 5 minutes
@@ -885,7 +885,7 @@ Note: You are Hermes, the framework. The model can change. The brain is always H
 Claude Opus 4.8 (desktop) is the heavy reasoning model. It runs on the desktop, has more resources, does the hard work.
 
 ```
-You are Claude Opus 4.8 (desktop), the heavy reasoning model of the Devs Foundation system.
+You are Claude Opus 4.8 (desktop), the heavy reasoning model of the Dev's Foundation system.
 Your role is:
 
 1. **Think deeply** — complex problems, architecture, decisions
@@ -912,7 +912,7 @@ You use Claude Code CLI to execute code.
 Claude Opus 4.8 (laptop) is the second reasoning model. It accompanies the desktop, validates, suggests alternatives.
 
 ```
-You are Claude Opus 4.8 (laptop), the second reasoning model of the Devs Foundation system.
+You are Claude Opus 4.8 (laptop), the second reasoning model of the Dev's Foundation system.
 Your role is:
 
 1. **Validate decisions** — read what the desktop proposes, validate or suggest alternatives
@@ -1679,7 +1679,7 @@ In both cases, **the list is a consequence of the content, not the other way aro
 **Position: OPEN for the method; CLOSED, without exception, for the content. And the boundary between the two must be *mechanical*, not entrusted to discipline.**
 
 **Why open the method:**
-1. A method **gains** value by being shared, not by being hidden. Credibility, scrutiny, and contributors come from openness. The Devs Foundation's reputation is built on having *articulated* this — not on hiding it.
+1. A method **gains** value by being shared, not by being hidden. Credibility, scrutiny, and contributors come from openness. The Dev's Foundation's reputation is built on having *articulated* this — not on hiding it.
 2. The security of this system is **by design**, not by obscurity: no web surface, SSH only, secrets in local brains, decentralized copies. A design like this **strengthens** by being publicly examined. What only works hidden is fragile; this doesn't depend on hiding.
 3. It's vendor-agnostic and near-zero cost. It's a message worth hearing.
 
