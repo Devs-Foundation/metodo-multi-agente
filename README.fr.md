@@ -1312,58 +1312,7 @@ docker exec n8n tar -czf /backup/n8n-$(date +%Y%m%d).tar.gz /home/node/.n8n
 
 ---
 
-## Annexe C — Diagramme d'Architecture
-
-```
-                    ┌─────────────────────────┐
-                    │       FONDATEUR          │
-                    │   (L'Être Humain)        │
-                    │   Décide · Dirige        │
-                    └──────────┬──────────────┘
-                               │ DM Discord
-                               ▼
-┌─────────────────────────────────────────────────┐
-│                   VPS (24/7)                      │
-│                                                   │
-│  ┌─────────────────┐    ┌──────────────────┐     │
-│  │    HERMES        │    │   CERVEAU MASTER  │     │
-│  │  Framework       │◄──►│   Git Bare Repo   │     │
-│  │  Admin Sécurité  │    │   Mémoire Infinie │     │
-│  │  Skills Pentest  │    └────────┬─────────┘     │
-│  └─────────────────┘             │                 │
-│                                  │                 │
-│  ┌─────────────────┐             │                 │
-│  │      n8n         │◄────────────┘                 │
-│  │  Système Nerveux │                              │
-│  │  Webhooks · Deploy│                              │
-│  └─────────────────┘                                │
-└─────────────────────────────────────────────────────┘
-                    │
-       ┌────────────┼────────────┐
-       │            │            │
-       ▼            ▼            ▼
-┌──────────┐ ┌──────────┐ ┌──────────┐
-│ CLAUDE   │ │ CLAUDE   │ │ OBSIDIAN │
-│ OPUS 4.8 │ │ OPUS 4.8 │ │ Fenêtre  │
-│ DESKTOP  │ │ LAPTOP   │ │ Locale   │
-│ Cerveau  │ │ Cerveau  │ │ SANS web │
-│ Local    │ │ Local    │ │          │
-└──────────┘ └──────────┘ └──────────┘
-```
-
-**Légende :**
-- Lignes pleines = données / synchronisation
-- Lignes pointillées = lecture locale
-- Chaque modèle a son cerveau local (clone complet du Master)
-- Les secrets restent dans les cerveaux locaux — ils ne montent jamais vers le Master
-- Le cerveau Master est toujours actif (VPS 24/7)
-- Le fondateur accède depuis n'importe où (Discord DM)
-- Pas d'interface web = pas de surface d'attaque
-- Hermes est le framework — le modèle peut changer sans changer Hermes
-
----
-
-## Annexe D — Comment Utiliser Ce Guide (Prompt pour IA)
+## Annexe C — Comment Utiliser Ce Guide (Prompt pour IA)
 
 Ce fichier git a été **écrit par IA pour que l'IA le lise**. Il est structuré sous forme de prompt — chaque section, chaque paragraphe, chaque note a été conçue pour être comprise par un modèle de langage.
 
@@ -1387,7 +1336,7 @@ Ce fichier git a été **écrit par IA pour que l'IA le lise**. Il est structur�
 
 ---
 
-## Annexe E — Règle de Silence : Couper les Sorties Inutiles
+## Annexe D — Règle de Silence : Couper les Sorties Inutiles
 
 ### Le Problème des Tokens
 
@@ -1477,7 +1426,7 @@ Avec la Règle de Silence implémentée :
 
 ---
 
-## Annexe F — Failover d'API Gratuites : Quand l'Une Tombe, l'Autre Prend le Relais
+## Annexe E — Failover d'API Gratuites : Quand l'Une Tombe, l'Autre Prend le Relais
 
 ### Le Problème
 

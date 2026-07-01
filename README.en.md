@@ -1312,58 +1312,7 @@ docker exec n8n tar -czf /backup/n8n-$(date +%Y%m%d).tar.gz /home/node/.n8n
 
 ---
 
-## Appendix C — Architecture Diagram
-
-```
-                    ┌─────────────────────────┐
-                    │        FOUNDER            │
-                    │    (The Human)            │
-                    │   Decides · Directs       │
-                    └──────────┬──────────────┘
-                               │ DM Discord
-                               ▼
-┌─────────────────────────────────────────────────┐
-│                   VPS (24/7)                      │
-│                                                   │
-│  ┌─────────────────┐    ┌──────────────────┐     │
-│  │    HERMES        │    │   MASTER BRAIN    │     │
-│  │  Framework       │◄──►│   Git Bare Repo   │     │
-│  │  Security Admin  │    │   Infinite Memory │     │
-│  │  Pentest Skills  │    └────────┬─────────┘     │
-│  └─────────────────┘             │                 │
-│                                  │                 │
-│  ┌─────────────────┐             │                 │
-│  │      n8n         │◄────────────┘                 │
-│  │  Nervous System  │                              │
-│  │  Webhooks · Deploy│                              │
-│  └─────────────────┘                                │
-└─────────────────────────────────────────────────────┘
-                    │
-       ┌────────────┼────────────┐
-       │            │            │
-       ▼            ▼            ▼
-┌──────────┐ ┌──────────┐ ┌──────────┐
-│ CLAUDE   │ │ CLAUDE   │ │ OBSIDIAN │
-│ OPUS 4.8 │ │ OPUS 4.8 │ │ Window   │
-│ DESKTOP  │ │ LAPTOP   │ │ Local    │
-│ Local    │ │ Local    │ │ NO web   │
-│ Brain    │ │ Brain    │ │          │
-└──────────┘ └──────────┘ └──────────┘
-```
-
-**Legend:**
-- Solid lines = data / synchronization
-- Dashed lines = local reading
-- Each model has its own local brain (complete clone of the Master)
-- Secrets stay in local brains — never go up to the Master
-- The Master brain is always on (VPS 24/7)
-- The founder accesses from anywhere (Discord DM)
-- No web interface = no attack surface
-- Hermes is the framework — the model can change without changing Hermes
-
----
-
-## Appendix D — How to Use This Guide (Prompt for AI)
+## Appendix C — How to Use This Guide (Prompt for AI)
 
 This git file was **written by AI for AI to read**. It is structured as a prompt — each section, each paragraph, each note was designed to be understood by a language model.
 
@@ -1387,7 +1336,7 @@ This git file was **written by AI for AI to read**. It is structured as a prompt
 
 ---
 
-## Appendix E — Silence Rule: Cut Unnecessary Outputs
+## Appendix D — Silence Rule: Cut Unnecessary Outputs
 
 ### The Token Problem
 
@@ -1477,7 +1426,7 @@ With the Silence Rule implemented:
 
 ---
 
-## Appendix F — Free API Failover: When One Falls, Another Takes Over
+## Appendix E — Free API Failover: When One Falls, Another Takes Over
 
 ### The Problem
 

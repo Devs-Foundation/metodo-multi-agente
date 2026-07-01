@@ -1312,58 +1312,7 @@ docker exec n8n tar -czf /backup/n8n-$(date +%Y%m%d).tar.gz /home/node/.n8n
 
 ---
 
-## Anhang C — Architekturdiagramm
-
-```
-                    ┌─────────────────────────┐
-                    │        GRÜNDER           │
-                    │   (Der Mensch)           │
-                    │   Entscheidet · Lenkt     │
-                    └──────────┬──────────────┘
-                               │ DM Discord
-                               ▼
-┌─────────────────────────────────────────────────┐
-│                   VPS (24/7)                      │
-│                                                   │
-│  ┌─────────────────┐    ┌──────────────────┐     │
-│  │    HERMES        │    │   MASTER-GEHIRN   │     │
-│  │  Framework       │◄──►│   Git Bare Repo   │     │
-│  │  Admin Sicherheit│    │   Unendl. Gedächtnis│     │
-│  │  Pentest-Skills  │    └────────┬─────────┘     │
-│  └─────────────────┘             │                 │
-│                                  │                 │
-│  ┌─────────────────┐             │                 │
-│  │      n8n         │◄────────────┘                 │
-│  │  Nervensystem    │                              │
-│  │  Webhooks · Deploy│                              │
-│  └─────────────────┘                                │
-└─────────────────────────────────────────────────────┘
-                    │
-       ┌────────────┼────────────┐
-       │            │            │
-       ▼            ▼            ▼
-┌──────────┐ ┌──────────┐ ┌──────────┐
-│ CLAUDE   │ │ CLAUDE   │ │ OBSIDIAN │
-│ OPUS 4.8 │ │ OPUS 4.8 │ │ Fenster  │
-│ DESKTOP   │ │ LAPTOP   │ │ Lokal    │
-│ Lokales  │ │ Lokales  │ │ OHNE Web │
-│ Gehirn   │ │ Gehirn   │ │          │
-└──────────┘ └──────────┘ └──────────┘
-```
-
-**Legende:**
-- Durchgezogene Linien = Daten / Synchronisation
-- Gestrichelte Linien = lokales Lesen
-- Jedes Modell hat sein lokales Gehirn (vollständiger Klon des Masters)
-- Geheimnisse bleiben in den lokalen Gehirnen — gelangen nie zum Master
-- Das Master-Gehirn ist immer an (VPS 24/7)
-- Der Gründer greift von jedem Punkt aus zu (Discord DM)
-- Keine Weboberfläche = keine Angriffsfläche
-- Hermes ist das Framework — das Modell kann wechseln, ohne Hermes zu ändern
-
----
-
-## Anhang D — Wie man diesen Leitfaden verwendet (Prompt für KI)
+## Anhang C — Wie man diesen Leitfaden verwendet (Prompt für KI)
 
 Diese Git-Datei wurde **von KI für KI zum Lesen geschrieben**. Sie ist in Prompt-Form strukturiert — jeder Abschnitt, jeder Absatz, jede Notiz wurde entworfen, um von einem Sprachmodell verstanden zu werden.
 
@@ -1387,7 +1336,7 @@ Diese Git-Datei wurde **von KI für KI zum Lesen geschrieben**. Sie ist in Promp
 
 ---
 
-## Anhang E — Schweigeregel: Unnötige Ausgaben vermeiden
+## Anhang D — Schweigeregel: Unnötige Ausgaben vermeiden
 
 ### Das Problem der Tokens
 
@@ -1477,7 +1426,7 @@ Mit implementierter Schweigeregel:
 
 ---
 
-## Anhang F — Failover für kostenlose APIs: Wenn eine ausfällt, übernimmt eine andere
+## Anhang E — Failover für kostenlose APIs: Wenn eine ausfällt, übernimmt eine andere
 
 ### Das Problem
 
